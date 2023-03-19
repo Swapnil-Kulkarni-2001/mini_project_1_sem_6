@@ -6,6 +6,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { openToggle } from '@/store/accountSidePanel/slice';
+import Image from 'next/image';
 
 
 
@@ -17,8 +18,13 @@ const FNavbar = () => {
         return state.sideDrower.open;
     })
 
+
+    const myLoader = ({ src, width, quality }) => {
+        return `https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q=`
+    }
+
     return (
-        <div className="py-2 px-5 md:px-40 flex flex-row items-center  shadow-md">
+        <div className="py-2 px-5 md:px-40 flex flex-row items-center bg-white ">
             <div className='border-4 py-1 border-white'>
                 <h1 className="text-3xl text-blue-600 font-bold">Karya</h1>
 
@@ -38,7 +44,10 @@ const FNavbar = () => {
             </div>
 
             <div onClick={() => dispatch(openToggle(open))} className="ml-10 bg-white border-2 cursor-pointer border-gray-300 w-20 py-1 px-2 rounded-3xl flex flex-row items-center">
-                <FaUserCircle className="text-3xl text-gray-300" />
+                {/* <FaUserCircle className="text-3xl text-gray-300" /> */}
+                <div className="bg-white rounded-full relative h-8 w-8 ">
+                    <Image fill={true} className="rounded-full" loader={myLoader} src="https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q=" />
+                </div>
                 <HiMenuAlt2 className="text-3xl text-gray-500 ml-auto" />
             </div>
         </div>

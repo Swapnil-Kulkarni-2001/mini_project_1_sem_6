@@ -7,15 +7,23 @@ import { FaUserCircle } from "react-icons/fa";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { AiOutlineSetting } from "react-icons/ai";
+import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 
 const AccountSidePanel = () => {
 
   const dispatch = useDispatch();
 
+  const router = useRouter();
+
   const open = useSelector((state) => {
     return state.sideDrower.open;
   })
+
+  const myLoader = ({ src, width, quality }) => {
+    return `https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q=`
+  }
 
   console.log(open)
 
@@ -24,11 +32,15 @@ const AccountSidePanel = () => {
       <div className="flex flex-row ml-auto">
         <AiOutlineClose className="text-2xl text-gray-500 " onClick={() => dispatch(openToggle(open))} />
       </div>
-      <div className="flex flex-row w-full mt-2 pr-5">
-        <div>
-          <FaUserCircle className="text-8xl text-gray-300" />
+      <div className="flex flex-row w-full mt-2 pr-5 cursor-pointer" onClick={() => {
+        router.push("/profile")
+        dispatch(openToggle(open))
+      }}>
+        <div className="flex flex-col relative rounded-full w-[35%] h-24 bg-red-300">
+          {/* <FaUserCircle className="text-8xl text-gray-300" /> */}
+          <Image alt="no image" fill={true} className="rounded-full" loader={myLoader} src="https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q="/>
         </div>
-        <div className="flex flex-col mt-2 ml-2">
+        <div className="flex flex-col mt-2 ml-2 ">
           <h1 className="text-xl font-semibold">Swapnil Kulkarni</h1>
           <h1 className="text-sm text-gray-600">near sadhana highschool gadhinglaj</h1>
         </div>
