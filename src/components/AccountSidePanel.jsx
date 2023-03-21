@@ -33,7 +33,7 @@ const AccountSidePanel = () => {
         <AiOutlineClose className="text-2xl text-gray-500 " onClick={() => dispatch(openToggle(open))} />
       </div>
       <div className="flex flex-row w-full mt-2 pr-5 cursor-pointer" onClick={() => {
-        router.push("/profile")
+        router.push("/wuser/profile")
         dispatch(openToggle(open))
       }}>
         <div className="flex flex-col relative rounded-full w-[35%] h-24 bg-red-300">
@@ -46,7 +46,10 @@ const AccountSidePanel = () => {
         </div>
       </div>
       <div className="flex flex-col mt-5 w-full">
-        <div className={`border-2 hover:cursor-pointer px-10 py-5 mr-5 rounded-2xl`}>
+        <div onClick={()=>{
+          router.push("/wuser/profile/updateprofile")
+          dispatch(openToggle(open))
+        }} className={`border-2 hover:cursor-pointer px-10 py-5 mr-5 rounded-2xl`}>
           <h1 className="text-[#457eff] text-lg font-medium">Update your profile</h1>
           <div className="flex flex-row items-center w-full">
             <h1 className="text-sm text-gray-400">help people to find you</h1>

@@ -55,23 +55,56 @@ const homepage = () => {
                             </div>
                         </div>
 
-                        <div className="flex flex-col  ml-10 bg-white w-full  border rounded-xl overflow-hidden ">
+                        <div className="flex flex-col  ml-10  w-full  overflow-hidden ">
+                            <div className="flex flex-row p-5 items-center bg-white shadow-md">
+                                <h1 className="text-6xl text-gray-500 font-bold mr-3">22</h1>
+                                <div className="flex flex-col text-sm text-gray-600 font-bold mr-5">
+                                    <h1>Total</h1>
+                                    <h1>applies</h1>
+                                </div>
+                                <div className="h-full w-[2px] bg-gray-500 mr-5" />
+                                <h1 className="text-6xl text-gray-500 font-bold mr-3">0</h1>
+                                <div className="flex flex-col text-sm text-gray-600 font-bold mr-5">
+                                    <h1>Responses by</h1>
+                                    <h1>people</h1>
+                                </div>
+
+                                <div className="h-full w-[2px] bg-gray-500 mr-5" />
+                                <h1 className="text-6xl text-gray-500 font-bold mr-3">0</h1>
+                                <div className="flex flex-col text-sm text-gray-600 font-bold mr-5">
+                                    <h1>Search</h1>
+                                    <h1>appearances</h1>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col mt-5 p-5 bg-white h-full rounded-2xl">
+                                <div className="flex flex-row items-center">
+                                    <h1 className="text-lg font-semibold mr-5">Recommended works</h1>
+                                    <h1 className="text-lg font-semibold text-blue-500 cursor-pointer">view all</h1>
+                                </div>
+
+                                <div className="flex flex-row mt-5 gap-x-5">
+                                    <WorkProviderCard />
+                                    <WorkProviderCard />
+                                </div>
+                            </div>
 
                         </div>
+
                     </div>
-                    <div className="flex flex-col mt-10   w-full  rounded-xl overflow-hidden ">
-                    <div className="flex flex-row items-center ml-4 mt-4 text-base font-semibold text-[#121224]">
-                            <h1 className="mr-5">Work invites</h1>
-                            <h1 className="text-sm text-blue-500 cursor-pointer">view all</h1>
+                    <div className="flex flex-col mt-10 p-5 bg-white  w-full  rounded-xl overflow-hidden ">
+                        <div className="flex flex-row items-center   text-base font-semibold text-[#121224]">
+                            <h1 className="text-lg font-semibold mr-5">Work invites</h1>
+                            <h1 className="text-lg text-blue-500 cursor-pointer">view all</h1>
                         </div>
-                        <div className='grid grid-flow-col gap-x-10 h-full md:py-4 md:px-4 overflow-x-auto scrollbar'>
-                            <WorkProviderInvitesCard/>
-                            <WorkProviderInvitesCard/>
-                            <WorkProviderInvitesCard/>
-                            <WorkProviderInvitesCard/>
+                        <div className='flex flex-row gap-x-10 h-full mt-5 overflow-x-auto scrollbar'>
+                            <WorkProviderInvitesCard />
+                            <WorkProviderInvitesCard />
+                            <WorkProviderInvitesCard />
+                            
                         </div>
                     </div>
-                    <div className="flex flex-col mt-10   w-full  rounded-xl overflow-hidden ">
+                    {/* <div className="flex flex-col mt-10   w-full  rounded-xl overflow-hidden ">
                         <div className="flex flex-row items-center ml-4 mt-4 text-base font-semibold text-[#121224]">
                             <h1 className="mr-5">Related works</h1>
                             <h1 className="text-sm text-blue-500 cursor-pointer">view all</h1>
@@ -90,7 +123,7 @@ const homepage = () => {
                             <WorkProviderCard />
                             <WorkProviderCard />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
