@@ -3,11 +3,11 @@ import FNavbar from '@/components/FNavbar'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { FaUserCircle } from "react-icons/fa";
-import WorkProviderCard from '@/components/WorkProviderCard';
+import WorkCard from '@/components/worker/homepage/WorkCard';
 import { AiFillStar } from "react-icons/ai";
 import ProgressBar from '@/components/ProgressBar';
 import Image from 'next/image';
-import WorkProviderInvitesCard from '@/components/WorkProviderInvitesCard';
+
 
 const homepage = () => {
 
@@ -84,11 +84,10 @@ const homepage = () => {
                                 </div>
 
                                 <div className="flex flex-row mt-5 gap-x-5">
-                                    <WorkProviderCard />
-                                    <WorkProviderCard />
+                                    <WorkCard />
+                                    <WorkCard />         
                                 </div>
                             </div>
-
                         </div>
 
                     </div>
@@ -98,10 +97,9 @@ const homepage = () => {
                             <h1 className="text-lg text-blue-500 cursor-pointer">view all</h1>
                         </div>
                         <div className='flex flex-row gap-x-10 h-full mt-5 overflow-x-auto scrollbar'>
-                            <WorkProviderInvitesCard />
-                            <WorkProviderInvitesCard />
-                            <WorkProviderInvitesCard />
-                            
+                            <WorkCard />
+                            <WorkCard /> 
+                            <WorkCard />
                         </div>
                     </div>
                     {/* <div className="flex flex-col mt-10   w-full  rounded-xl overflow-hidden ">

@@ -8,10 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openToggle } from '@/store/accountSidePanel/slice';
 import Image from 'next/image';
 
-
-
-const FNavbar = () => {
-
+const Navbar = () => {
     const dispatch = useDispatch();
 
     const open = useSelector((state) => {
@@ -29,13 +26,16 @@ const FNavbar = () => {
                 <h1 className="text-3xl text-blue-600 font-bold">Karya</h1>
             </div>
             <div className="text-sm flex flex-row ml-auto">
+                <div className='border-4 py-1 rounded-md border-white mr-10  hover:border-b-[#ff7555]'>
+                    <Link href="" className="text-gray-600  hover:text-black font-semibold text-md">find workers</Link>
+                </div>
                 <div className='border-4 py-1 rounded-md border-white  hover:border-b-[#ff7555]'>
-                    <Link href="/wuser/works" className="text-gray-600  hover:text-black font-semibold text-md">Find all Works</Link>
+                    <Link href="/wpuser/postworks" className="text-gray-600  hover:text-black font-semibold text-md">post works</Link>
                 </div>
             </div>
 
             <div className="group w-[30rem] flex flex-row py-1 pl-3 pr-2 ml-10 rounded-full  bg-[#f1f1f1] hover:bg-[#fafafa] hover:border-2">
-                <input type="text" placeholder="Search any work here" className="w-[90%]  bg-[#f1f1f1] group-hover:bg-[#fafafa] outline-none text-sm font-medium" required />
+                <input type="text" placeholder="Search workers" className="w-[90%]  bg-[#f1f1f1] group-hover:bg-[#fafafa] outline-none text-sm font-medium" required />
                 {/* <button className="ml-auto px-5 py-1 bg-[#457eff] rounded-2xl text-white font-semibold">Search</button> */}
                 <div className="bg-[#457eff] rounded-full p-1 ml-auto">
                     <AiOutlineSearch className="text-xl text-white " />
@@ -53,4 +53,4 @@ const FNavbar = () => {
     )
 }
 
-export default FNavbar
+export default Navbar

@@ -6,15 +6,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '@/store/auth/slice';
 import { useRouter } from 'next/router';
 
-import Cookies from 'universal-cookie';
 
-import { userPassSelector,userEmailSelector} from '@/store/auth/selector';
+
+import { userPassSelector, userEmailSelector, userTypeSelector, userAccessTokenSelector } from '@/store/auth/selector';
 
 
 
 const login = () => {
 
-  const cookie = new Cookies();
+  // const cookie = new Cookies();
 
   const [visible, setVisible] = useState(false);
 
@@ -29,9 +29,15 @@ const login = () => {
     return state.auth.isAuthenticated;
   })
 
-  const user_email = useSelector(userEmailSelector);
-  const user_pass = useSelector(userPassSelector);
+  // const user_email = useSelector(userEmailSelector);
+  // const user_pass = useSelector(userPassSelector);
 
+  const access_token = useSelector(userAccessTokenSelector);
+
+  //console.log(access_token);
+
+  const user_type = useSelector(userTypeSelector);
+  //console.log(user_type);
 
   const onShowToggleBtnClicked = () => {
     setVisible(!visible);
@@ -47,12 +53,15 @@ const login = () => {
 
   if (auth === true) {
 
-    cookie.remove("email");
-    cookie.remove("password");
+    //Cookies.set("at",access_token);
 
-    cookie.set("email",user_email);
-    cookie.set("password",user_pass);
-    //router.push("/wuser/homepage")
+    if (user_type === "Employee") {
+      router.push("/wuser/homepage")
+    }
+
+    if (user_type === "Employeer") {
+      router.push("/wpuser/homepage")
+    }
   }
 
   return (

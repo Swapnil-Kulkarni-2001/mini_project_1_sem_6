@@ -9,7 +9,7 @@ import { RxCounterClockwiseClock } from "react-icons/rx";
 import { FaBookmark } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa";
 
-const WorkProviderCard = () => {
+const WorkCard = () => {
 
   const myLoader = ({ src, width, quality }) => {
     return `https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q=`
@@ -59,4 +59,4 @@ const WorkProviderCard = () => {
   )
 }
 
-export default WorkProviderCard
+export default WorkCard

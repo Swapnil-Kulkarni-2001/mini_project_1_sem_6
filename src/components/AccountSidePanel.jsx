@@ -8,6 +8,9 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { AiOutlineSetting } from "react-icons/ai";
 import { useRouter } from 'next/router';
+
+import { userTypeSelector } from '@/store/auth/selector';
+
 import Image from 'next/image';
 
 
@@ -21,11 +24,11 @@ const AccountSidePanel = () => {
     return state.sideDrower.open;
   })
 
+  const user_type = useSelector(userTypeSelector);
+
   const myLoader = ({ src, width, quality }) => {
     return `https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q=`
   }
-
-  console.log(open)
 
   return (
     <div className="flex flex-col items-center h-full rounded-tl-3xl rounded-bl-3xl bg-white shadow-2xl py-5 px-5">
@@ -33,7 +36,14 @@ const AccountSidePanel = () => {
         <AiOutlineClose className="text-2xl text-gray-500 " onClick={() => dispatch(openToggle(open))} />
       </div>
       <div className="flex flex-row w-full mt-2 pr-5 cursor-pointer" onClick={() => {
-        router.push("/wuser/profile")
+        if(user_type==="Employee")
+        {
+          router.push("/wuser/profile")
+        }
+        if(user_type==="Employeer")
+        {
+          router.push("/wpuser/profile")
+        }
         dispatch(openToggle(open))
       }}>
         <div className="flex flex-col relative rounded-full w-[35%] h-24 bg-red-300">
@@ -47,7 +57,14 @@ const AccountSidePanel = () => {
       </div>
       <div className="flex flex-col mt-5 w-full">
         <div onClick={()=>{
-          router.push("/wuser/profile/updateprofile")
+          if(user_type==="Employee")
+          {
+            router.push("/wuser/profile/updateprofile")
+          }
+          if(user_type==="Employeer")
+          {
+            router.push("/wpuser/profile/updateprofile")
+          }
           dispatch(openToggle(open))
         }} className={`border-2 hover:cursor-pointer px-10 py-5 mr-5 rounded-2xl`}>
           <h1 className="text-[#457eff] text-lg font-medium">Update your profile</h1>

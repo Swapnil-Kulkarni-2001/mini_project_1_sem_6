@@ -20,11 +20,12 @@ const initialState = {
     isAuthenticated : false,
     authLoading : false,
     isFirstTime : true,
-    userType : 0,
+    userType : "",
     userEmail : "",
     userPass : "",
     userId : "",
     userLoc : {} ,
+    userAccessToken : "",
     error : "",
 }
 
@@ -47,6 +48,8 @@ const authSlice = createSlice({
             //     console.log("Auth");
             // }
 
+        
+
             if(payload.status==="failed to login")
             {
                 console.log("unAuth");
@@ -55,18 +58,13 @@ const authSlice = createSlice({
             else{
                 state.isAuthenticated = true;
                 console.log("Auth");
+                console.log(payload.data);
                 console.log(payload.data[0].email)
-                if(payload.data[0].occupation==="Employee")
-                {
-                    state.userType = 1;
-                }
-                if(payload.data[0].occupation==="Employeer")
-                {
-                    state.userType = 2;
-                }
+                state.userType = payload.data[0].occuopation;
                 state.userEmail = payload.data[0].email;
                 state.userId = payload.data[0]._id;
                 state.userPass = payload.data[0].password;
+                state.userAccessToken = payload.token;
             }
 
         });

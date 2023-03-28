@@ -13,7 +13,7 @@ const register = () => {
     const [uPhone, setUphone] = useState("");
 
 
-    const [msg,setMsg] = useState("");
+    const [msg, setMsg] = useState("");
 
     const router = useRouter();
 
@@ -33,15 +33,14 @@ const register = () => {
                 Type: typ
             });
             console.log(resp.data);
-            if(resp.data.status==="failed to register")
-            {
+            if (resp.data.status === "failed to register") {
                 setMsg(resp.data.reason);
             }
-            else{
+            else {
                 setMsg("Registeration succ Redirecting to Login")
-                setTimeout(()=>{
+                setTimeout(() => {
                     router.push("/login")
-                },5000);
+                }, 5000);
             }
         } catch (error) {
             console.log(error);
@@ -105,9 +104,9 @@ const register = () => {
                         <div className="mt-5">
                             <button type="submit" className="bg-[#457eff] px-8 py-2 rounded-3xl text-white text-lg font-semibold">Register now</button>
                         </div>
-                        
+
                         <h1>{msg}</h1>
-                        
+
                     </form>
                 </div>
             </div>
