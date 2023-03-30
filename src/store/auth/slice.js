@@ -16,23 +16,60 @@ export const loginUser = createAsyncThunk("loginUser",async (data)=>{
     }
 })
 
+export const logoutUser = createAsyncThunk("logoutUser",async()=>{
+
+    try{
+
+        const resp = await axios.get("/logout");
+        return resp.data;
+
+    }catch(error){
+        console.error(error);
+    }
+
+});
+
+export const fetchProfilePicEmp = createAsyncThunk("fetchProfilePicEmp",async()=>{
+
+    try{
+
+        const resp = await axios.get("/employee/uploadProfileImg");
+        //console.log(resp.data);
+        return resp.data;
+
+    }catch(error){
+        console.error(error);
+    }
+
+});
+
 const initialState = {
     isAuthenticated : false,
     authLoading : false,
+    isLogoutLoding : false,
     isFirstTime : true,
+    userName : "",
     userType : "",
     userEmail : "",
     userPass : "",
     userId : "",
     userLoc : {} ,
     userAccessToken : "",
+    profilePic : "",
+    profilePicLoading : false,
     error : "",
 }
 
 const authSlice = createSlice({
     name : "auth",
     initialState,
+    reducers:{
 
+        setIsAuthenticated :(state,action)=>{
+            state.isAuthenticated = action.payload;
+        }
+
+    },
     extraReducers:(builder)=>{
 
         builder.addCase(loginUser.pending,(state,action)=>{
@@ -65,6 +102,12 @@ const authSlice = createSlice({
                 state.userId = payload.data[0]._id;
                 state.userPass = payload.data[0].password;
                 state.userAccessToken = payload.token;
+
+                try{
+                    state.profilePic = payload.data[0].profileImg;
+                }catch(error){
+
+                }
             }
 
         });
@@ -72,8 +115,42 @@ const authSlice = createSlice({
         builder.addCase(loginUser.rejected,(state,action)=>{
             state.error = action.error;
         });
+
+        //logout user
+
+        builder.addCase(logoutUser.pending,(state,action)=>{
+            state.isLogoutLoding = true;
+        });
+
+        builder.addCase(logoutUser.fulfilled,(state,action)=>{
+            state.isLogoutLoding = false;
+        });
+        
+        builder.addCase(logoutUser.rejected,(state,action)=>{
+            state.isLogoutLoding = false;
+        });
+
+
+        //fetch profilepic for employee
+
+        builder.addCase(fetchProfilePicEmp.pending,(state,action)=>{
+            state.profilePicLoading = true;
+        });
+
+        builder.addCase(fetchProfilePicEmp.fulfilled,(state,{payload})=>{
+            state.profilePicLoading = false;
+            //console.log(payload);
+            state.profilePic = payload.url;
+        });
+
+        builder.addCase(fetchProfilePicEmp.rejected,(state,action)=>{
+            state.profilePicLoading = false;
+        });
+
     }
 })
 
+export const {setIsAuthenticated} = authSlice.actions;
 
 export default authSlice.reducer
+

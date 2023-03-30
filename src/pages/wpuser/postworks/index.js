@@ -16,9 +16,9 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 // import { fetchWorkPostByEmployeer } from '@/store/workPostByEmployeer/slice';
 
-import { postWork,fetchAllWorkPost,fetchWorkPost } from '@/store/workprovider/workpost/slice';
+import { postWork, fetchAllWorkPost, fetchWorkPost } from '@/store/workprovider/workpost/slice';
 
-import { allWorkPostSelector,workPostSelector,isLoadingSelector } from '@/store/workprovider/workpost/selector';
+import { allWorkPostSelector, workPostSelector, isLoadingSelector } from '@/store/workprovider/workpost/selector';
 
 const index = () => {
 
@@ -49,13 +49,17 @@ const index = () => {
     const dispatch = useDispatch();
 
 
+    const allWorkPosts = useSelector(allWorkPostSelector);
+
+  
+
+
     useEffect(() => {
         console.log("called")
         dispatch(fetchAllWorkPost());
     }, []);
 
-    const allWorkPosts = useSelector(allWorkPostSelector);
-
+    
 
     const validatePostDetails = () => {
 
@@ -102,7 +106,7 @@ const index = () => {
                 }));
 
                 setModel(false);
-                setReRender(reRender+1);
+                //setReRender(reRender+1);
             }, () => {
                 setLocationStatus(false);
             });
@@ -118,8 +122,7 @@ const index = () => {
 
     }
 
-    if(!allWorkPosts)
-    {
+    if (allWorkPosts == undefined) {
         console.log(allWorkPosts.length);
         return <h1>Loading</h1>
     }
@@ -147,27 +150,22 @@ const index = () => {
 
                 <div className="flex flex-row h-full px-32 gap-x-20">
                     <div className="flex flex-col gap-y-7 my-10 basis-[65%]">
-                        {/* <WorkCard />
-                        <WorkCard />
-                        <WorkCard />
-                        <WorkCard />
-                        <WorkCard /> */}
                         {
-                            allWorkPosts ? 
-                            allWorkPosts.map((item, key) => (
-                                <WorkCard
-                                    workName={item.workName}
-                                    workAddress={item.workAddress}
-                                    workTime={item.workTime}
-                                    workDuration={item.workDuration}
-                                    workFrom={item.workFrom}
-                                    postTime={item.postTime}
-                                    isBookMarked={false}
-                                    workid={item._id}
-                                    key={key} />
-                            ))
-                            :
-                            null
+                          
+                                allWorkPosts.map((item, key) => (
+                                    <WorkCard
+                                        // workName={item.workName}
+                                        // workAddress={item.workAddress}
+                                        // workTime={item.workTime}
+                                        // workDuration={item.workDuration}
+                                        // workFrom={item.workFrom}
+                                        // postTime={item.postTime}
+                                        // isBookMarked={false}
+                                        // workid={item._id}
+                                        data={item}
+                                        key={key} />
+                                ))
+                            
                         }
                     </div>
 

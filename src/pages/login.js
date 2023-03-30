@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 
 
 
-import { userPassSelector, userEmailSelector, userTypeSelector, userAccessTokenSelector } from '@/store/auth/selector';
+import {userEmailSelector, userTypeSelector, userIdSelector } from '@/store/auth/selector';
 
 
 
@@ -32,11 +32,12 @@ const login = () => {
   // const user_email = useSelector(userEmailSelector);
   // const user_pass = useSelector(userPassSelector);
 
-  const access_token = useSelector(userAccessTokenSelector);
 
   //console.log(access_token);
 
   const user_type = useSelector(userTypeSelector);
+
+  const user_id = useSelector(userIdSelector);
   //console.log(user_type);
 
   const onShowToggleBtnClicked = () => {
@@ -54,6 +55,9 @@ const login = () => {
   if (auth === true) {
 
     //Cookies.set("at",access_token);
+
+    localStorage.setItem("uid",user_id);
+    localStorage.setItem("utype",user_type);
 
     if (user_type === "Employee") {
       router.push("/wuser/homepage")

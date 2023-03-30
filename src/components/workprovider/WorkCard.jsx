@@ -14,34 +14,43 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 
 
-const WorkCard = (props) => {
+const WorkCard = ({ data }) => {
 
     const router = useRouter();
 
+
     //console.log(data.workAddress);
     dayjs.extend(relativeTime);
-    const postTime = dayjs(props.postTime).fromNow();
 
+    let postTime = "";
+
+    if (data != undefined)
+    {
+        postTime = dayjs(data.postTime).fromNow();
+    }
+    else{
+        return null
+    }
     return (
-        <div onClick={()=>router.push(`/wpuser/postworks/${props.workid}`)} className="flex flex-col h-auto w-full  p-5 bg-white shadow-md border-2 cursor-pointer">
+        <div onClick={() => router.push(`/wpuser/postworks/${data._id}`)} className="flex flex-col h-auto w-full  p-5 bg-white shadow-md border-2 cursor-pointer">
 
             <div className="flex flex-col ml-2">
-                <h1 className="text-base font-bold text-[#091e42]">{props.workName}</h1>
-                <h1 className="text-sm font-semibold text-gray-500">Hrushikesh Bhosale</h1>
+                <h1 className="text-base font-bold text-[#091e42]">{data.workName}</h1>
+                <h1 className="text-sm font-semibold text-gray-500">{data.employeerName}</h1>
                 <div className="flex flex-row items-center mt-2">
                     <BiMap className="text-lg text-[#696977] mr-2" />
-                    <h1 className="text-sm text-[#696977] w-full">{props.workAddress}</h1>
+                    <h1 className="text-sm text-[#696977] w-full">{data.workAddress}</h1>
                 </div>
                 <div className="flex flex-row items-center mt-1">
                     <BsStopwatch className="text-lg text-[#696977] mr-2" />
-                    <h1 className="text-sm text-[#696977]">{props.workDuration}</h1>
+                    <h1 className="text-sm text-[#696977]">{data.workDuration}</h1>
                     <div className="flex flex-row ml-2 gap-x-2">
-                        <h1 className="text-sm text-[#696977] ">{props.workTime}</h1>
+                        <h1 className="text-sm text-[#696977] ">{data.workTime}</h1>
                     </div>
                 </div>
                 <div className="flex flex-row items-center mt-2">
                     <AiOutlineCalendar className="text-lg text-[#696977] mr-2" />
-                    <h1 className="text-sm text-[#696977] w-full">{props.workFrom}</h1>
+                    <h1 className="text-sm text-[#696977] w-full">{data.workFrom}</h1>
                 </div>
                 <div className="flex flex-row items-center mt-5 ">
                     <div className='flex flex-row items-center px-2 py-1 bg-[#f4f5f7]'>
@@ -50,7 +59,7 @@ const WorkCard = (props) => {
                     </div>
 
                     <div className="flex flex-col ml-auto">
-                        <FaRegBookmark className="text-lg cursor-pointer"/>
+                        <FaRegBookmark className="text-lg cursor-pointer" />
                     </div>
                 </div>
             </div>

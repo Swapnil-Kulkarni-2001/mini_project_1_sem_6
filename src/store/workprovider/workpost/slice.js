@@ -61,28 +61,59 @@ export const fetchWorkPost = createAsyncThunk("fetchWorkPost", async ({ workid }
 });
 
 
-export const deleteWorkPost = createAsyncThunk("deleteWorkPost",async ({workid})=>{
+export const deleteWorkPost = createAsyncThunk("deleteWorkPost", async ({ workid }) => {
 
-    try{
+    try {
 
-        const resp = await axios.post("/employeer/deletePost",{
-            postId : workid
+        const resp = await axios.post("/employeer/deletePost", {
+            postId: workid
         });
 
         return resp.data;
 
-    }catch(error){
+    } catch (error) {
         console.error(error);
     }
 });
+
+
+export const fetchApplicantList = createAsyncThunk("fetchApplicantList", async ({ workid }) => {
+    try {
+        const resp = await axios.post("/employeer/applicantList", {
+            postId: workid
+        });
+        return resp.data;
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+
+export const fetchAssignedList = createAsyncThunk("fetchAssignedList", async ({ workid }) => {
+    try {
+
+        const resp = await axios.post("/employeer/assignedList", {
+            postId: workid
+        });
+        return resp.data;
+    } catch (error) {
+        console.error(error);
+    }
+
+})
 
 
 const initialState = {
 
     allWorkPost: [],
     workPost: "",
+    workPostLoading : false,
+    applicantList: [],
+    applicantListLoading: false,
+    assignedList: [],
+    assignedListLoading: false,
     isLoading: false,
-    error : "",
+    error: "",
 };
 
 
@@ -118,9 +149,13 @@ const workPostSlice = createSlice({
 
             state.allWorkPost = [];
 
-            for (let i = 0; i < payload.data.length; i++) {
-                state.allWorkPost.push(payload.data[i][0]);
+            if (payload.data != undefined) {
+                for (let i = 0; i < payload.data.length; i++) {
+                    state.allWorkPost.push(payload.data[i][0]);
+                }
             }
+
+
 
         });
 
@@ -131,40 +166,74 @@ const workPostSlice = createSlice({
 
         //fetch work post by workId
 
-        builder.addCase(fetchWorkPost.pending,(state,action)=>{
-            state.isLoading = true
+        builder.addCase(fetchWorkPost.pending, (state, action) => {
+            state.workPostLoading = true
         });
 
-        builder.addCase(fetchWorkPost.fulfilled,(state,{payload})=>{
-            state.workPost = payload.data;
-            if(payload.data!=undefined)
-            {
-                state.isLoading = false;
+        builder.addCase(fetchWorkPost.fulfilled, (state, { payload }) => {
+            // state.workPost = payload.data;
+            if (payload != undefined) {
+                state.workPost = payload.data;
+                state.workPostLoading = false;
             }
         });
 
-        builder.addCase(fetchWorkPost.rejected,(state,action)=>{
-            state.isLoading = true;
+        builder.addCase(fetchWorkPost.rejected, (state, action) => {
+            state.workPostLoading = true;
             state.error = action.error;
         });
 
         //delete work post by workID
 
-        builder.addCase(deleteWorkPost.pending,(state,action)=>{
+        builder.addCase(deleteWorkPost.pending, (state, action) => {
 
             state.isLoading = true;
 
         });
 
-        builder.addCase(deleteWorkPost.fulfilled,(state,{payload})=>{
+        builder.addCase(deleteWorkPost.fulfilled, (state, { payload }) => {
             state.isLoading = true;
-            console.log(payload);
+            //console.log(payload);
         });
 
-        builder.addCase(deleteWorkPost.rejected,(state,action)=>{
+        builder.addCase(deleteWorkPost.rejected, (state, action) => {
             state.isLoading = false;
             state.error = action.error;
         });
+
+
+        //fetch applicant list
+
+        builder.addCase(fetchApplicantList.pending, (state, action) => {
+            state.applicantListLoading = true;
+        });
+
+        builder.addCase(fetchApplicantList.fulfilled, (state, { payload }) => {
+            state.applicantListLoading = false;
+            state.applicantList = payload.data;
+            //console.log(payload.data);
+        });
+
+        builder.addCase(fetchApplicantList.rejected, (state, action) => {
+            state.applicantListLoading = false;
+        });
+
+        //fetch assigned list
+
+        builder.addCase(fetchAssignedList.pending, (state, action) => {
+            state.assignedListLoading = true;
+        });
+
+        builder.addCase(fetchAssignedList.fulfilled, (state, { payload }) => {
+            state.assignedListLoading = false;
+            state.assignedList = payload.data;
+        });
+
+        builder.addCase(fetchAssignedList.rejected, (state, action) => {
+            state.assignedListLoading = false;
+        });
+
+
     }
 
 });

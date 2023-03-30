@@ -13,15 +13,21 @@ import AccountSidePanel from '@/components/AccountSidePanel';
 import WorkApplicationCard from '@/components/workprovider/WorkApplicationCard';
 import Navbar from '@/components/workprovider/Navbar';
 
-import { fetchWorkPost,deleteWorkPost } from '@/store/workprovider/workpost/slice';
+import { fetchWorkPost, deleteWorkPost, fetchApplicantList, fetchAssignedList } from '@/store/workprovider/workpost/slice';
 
-import { workPostSelector,isLoadingSelector } from '@/store/workprovider/workpost/selector';
+import { workPostSelector, isLoadingSelector, applicantListSelector, assignedListSelector } from '@/store/workprovider/workpost/selector';
 
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import WorkAssignedCard from '@/components/workprovider/WorkAssignedCard';
+
+//icons
+import { AiOutlineClose } from "react-icons/ai";
 
 
 const postworkid = () => {
+
+    const [assignedListModel, setAssignedListModel] = useState(false);
 
     const open = useSelector((state) => {
         return state.sideDrower.open;
@@ -33,54 +39,85 @@ const postworkid = () => {
 
     const dataLoading = useSelector(isLoadingSelector);
 
+    const applicantList = useSelector(applicantListSelector);
+
+    const assignedList = useSelector(assignedListSelector);
+
+    //console.log(applicantList[0]);
+
+    console.log(assignedList);
+
     dayjs.extend(relativeTime);
 
     let postTime;
 
-    const[check,setCheck] = useState(0);
 
-    if(data)
-    {
+
+    if (data) {
         postTime = dayjs(data.postTime).fromNow();
     }
 
 
-    console.log(router.query.postworkid,"mm");
+    // console.log(router.query.postworkid, "mm");
 
     const dispatch = useDispatch();
 
-    useEffect(()=>{
-        dispatch(fetchWorkPost({
-            workid : router.query.postworkid
-        }))
-    },[router.query.postworkid]);
+    useEffect(() => {
+
+        if (router.query.postworkid != undefined) {
+            dispatch(fetchWorkPost({
+                workid: router.query.postworkid
+            }));
+
+            dispatch(fetchApplicantList({
+                workid: router.query.postworkid
+            }));
+
+            dispatch(fetchAssignedList({
+                workid: router.query.postworkid
+            }));
+        }
+
+    }, [router.query.postworkid]);
 
     //console.log(data);
 
     const [bookmark, setBookmark] = useState(false);
 
-    
+    let count = 0;
 
-    const onBtnDeleteClicked = ()=>{
+    const onBtnDeleteClicked = () => {
         dispatch(deleteWorkPost({
-            workid : data._id,
+            workid: data._id,
         }));
-
         router.replace("/wpuser/postworks");
     }
 
 
 
-    
-    if(dataLoading || data===undefined)
-    {
-        console.log(data, " ",dataLoading)
+
+    if (dataLoading || data == undefined) {
+        //console.log(data, " ", dataLoading)
         return <h1>Loading</h1>
     }
 
 
+    function checkAssignList(emp_id) {
+        for (let i = 0; i < assignedList.length; i++) {
+            if (applicantList[i]._id === emp_id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+
+
+
     return (
-        <div className="flex flex-col h-auto bg-[#f7f7f7]">
+        <div className="flex flex-col h-auto bg-[#f7f7f7] ">
             <Navbar />
             <div className="flex flex-col h-full">
                 {/* <div className="bg-[#d4e4ff] h-48">
@@ -100,7 +137,7 @@ const postworkid = () => {
                 <div className="flex flex-col mx-20 px-10 py-10 bg-white h-auto rounded-lg">
                     <div className="flex flex-col">
                         <h1 className="text-xl font-bold text-[#091e42] cursor-pointer">{data.workName}</h1>
-                        <h1 className="text-sm mt-2 text-gray-700">Hrushikesh Bhosale</h1>
+                        <h1 className="text-sm mt-2 text-gray-700">{data.employeerName}</h1>
                         <div className="flex flex-row items-center mt-5">
                             <BiMap className="text-xl text-[#696977] mr-2" />
                             <h1 className="text-sm text-[#696977] w-full">{data.workAddress}</h1>
@@ -117,7 +154,7 @@ const postworkid = () => {
                             <h1 className="text-sm text-[#696977] w-full">{data.workFrom}</h1>
                         </div>
                         <div className="flex flex-row mt-7">
-                            <button className="px-5 py-1 border border-green-400 text-green-400  font-semibold mr-5 hover:shadow-xl">ASSIGNED TO</button>
+                            <button onClick={() => setAssignedListModel(true)} className="px-5 py-1 border border-green-400 text-green-400  font-semibold mr-5 hover:shadow-inner">ASSIGNED TO</button>
                             <button onClick={onBtnDeleteClicked} className="px-5 py-1 bg-red-500 text-white font-semibold  hover:shadow-xl">DELETE</button>
 
 
@@ -142,14 +179,36 @@ const postworkid = () => {
                 <div className="flex flex-col mt-5 bg-white mx-20 px-10 py-10 rounded-lg">
                     <h1 className="text-lg font-bold text-[#091e42]">Total Applications</h1>
                     <div className="flex flex-col mt-5 gap-y-5">
+                        {/* <WorkApplicationCard />
                         <WorkApplicationCard />
-                        <WorkApplicationCard />
-                        <WorkApplicationCard />
+                        <WorkApplicationCard /> */}
+                        {
+                            applicantList.map((item, key) =>
+                                <WorkApplicationCard assigned={checkAssignList(item._id)} data={item} />
+                            )
+
+                        }
+                    </div>
+                </div>
+
+                <div className={`absolute ${assignedListModel ? "flex flex-col" : "hidden"} overflow-y-auto  bg-white h-[30rem] w-[30rem] top-0 bottom-0 left-0 right-0 m-auto z-10 drop-shadow-2xl`}>
+                    <div className="flex flex-row items-center m-5 self-end">
+                        <AiOutlineClose onClick={()=>setAssignedListModel(false)} className="text-xl cursor-pointer"/>
+                    </div>
+                    <div className="flex flex-col gap-y-5 pb-10 px-10">
+                        {/* <WorkAssignedCard />
+                        <WorkAssignedCard />
+                        <WorkAssignedCard />
+                        <WorkAssignedCard />
+                        <WorkAssignedCard />
+                        <WorkAssignedCard /> */}
+                        {
+                            assignedList.map((item,key)=><WorkAssignedCard emp_id={item._id} name={item.name} phone={item.phone} key={key}/>)
+                        }
                     </div>
                 </div>
 
             </div>
-
         </div>
     )
 }

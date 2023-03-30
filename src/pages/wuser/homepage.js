@@ -1,12 +1,21 @@
 import AccountSidePanel from '@/components/AccountSidePanel'
 import FNavbar from '@/components/FNavbar'
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { FaUserCircle } from "react-icons/fa";
 import WorkCard from '@/components/worker/homepage/WorkCard';
 import { AiFillStar } from "react-icons/ai";
 import ProgressBar from '@/components/ProgressBar';
 import Image from 'next/image';
+
+
+
+//store imports
+import { fetchRecommendedWorks } from '@/store/worker/work/slice';
+import { recommendedWorksSelector, recommendedWorksLoadingSelector } from '@/store/worker/work/selector';
+
+import { fetchProfilePicEmp } from '@/store/auth/slice';
+import { profilePicSelector, profilePicLoadingSelector } from '@/store/auth/selector';
 
 
 const homepage = () => {
@@ -16,9 +25,26 @@ const homepage = () => {
         return state.sideDrower.open;
     })
 
-    const myLoader = ({ src, width, quality }) => {
-        return `https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q=`
-    }
+    const profilePic = useSelector(profilePicSelector);
+
+    const profilePicLoading = useSelector(profilePicLoadingSelector);
+
+    // const myLoader = ({ src, width, quality }) => {
+    //     return src;
+    // }
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchRecommendedWorks());
+        dispatch(fetchProfilePicEmp());
+    }, []);
+
+    const recommendedWorks = useSelector(recommendedWorksSelector);
+    const recommendedWorksLoading = useSelector(recommendedWorksLoadingSelector);
+
+    console.log(recommendedWorks, " ", recommendedWorksLoading);
+
 
     return (
         <div className="flex flex-col relative h-auto overflow-x-hidden bg-[#f5f5f5]">
@@ -41,7 +67,12 @@ const homepage = () => {
                                 {/* <FaUserCircle className="text-8xl text-gray-300" /> */}
                                 <div className="bg-white rounded-full relative h-28 w-28 ">
                                     {/* <FaUserCircle className="text-8xl text-[#d8d8d8]" /> */}
-                                    <Image alt="no image" fill={true} className="rounded-full" loader={myLoader} src="https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q=" />
+                                    {
+                                        profilePic == "" ? <FaUserCircle className="text-8xl text-[#d8d8d8]" />
+                                            :
+                                            <Image loader={() => profilePic} src={profilePic} alt="no image" fill={true} className="rounded-full" />
+                                    }
+
                                 </div>
                             </div>
                             <div className="flex flex-col mt-2 ml-2">
@@ -84,8 +115,30 @@ const homepage = () => {
                                 </div>
 
                                 <div className="flex flex-row mt-5 gap-x-5">
-                                    <WorkCard />
-                                    <WorkCard />         
+                                    {/* <WorkCard />
+                                    <WorkCard /> */}
+                                    {
+                                        recommendedWorks.map((item, key) => {
+                                            if (key > 1) {
+                                                return;
+                                            }
+                                            return (
+                                                <WorkCard
+                                                    workName={item.workName}
+                                                    employeerName={item.employeerName}
+                                                    workAddress={item.workAddress}
+                                                    workDuration={item.workDuration}
+                                                    workTime={item.workTime}
+                                                    workDescription={item.workDescription}
+                                                    workFrom={item.workFrom}
+                                                    postTime={item.postTime}
+                                                    employeerId={item.employeerId}
+                                                    workId={item._id}
+                                                    // data={item}
+                                                    key={key} />
+                                            )
+                                        })
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -98,30 +151,10 @@ const homepage = () => {
                         </div>
                         <div className='flex flex-row gap-x-10 h-full mt-5 overflow-x-auto scrollbar'>
                             <WorkCard />
-                            <WorkCard /> 
+                            <WorkCard />
                             <WorkCard />
                         </div>
                     </div>
-                    {/* <div className="flex flex-col mt-10   w-full  rounded-xl overflow-hidden ">
-                        <div className="flex flex-row items-center ml-4 mt-4 text-base font-semibold text-[#121224]">
-                            <h1 className="mr-5">Related works</h1>
-                            <h1 className="text-sm text-blue-500 cursor-pointer">view all</h1>
-                        </div>
-                        <div className='grid grid-flow-col gap-x-10  h-full md:py-4 md:px-4 overflow-x-auto scrollbar'>
-                            <WorkProviderCard />
-                            <WorkProviderCard />
-                            <WorkProviderCard />
-                            <WorkProviderCard />
-                            <WorkProviderCard />
-                            <WorkProviderCard />
-                            <WorkProviderCard />
-                            <WorkProviderCard />
-                            <WorkProviderCard />
-                            <WorkProviderCard />
-                            <WorkProviderCard />
-                            <WorkProviderCard />
-                        </div>
-                    </div> */}
                 </div>
             </div>
         </div>

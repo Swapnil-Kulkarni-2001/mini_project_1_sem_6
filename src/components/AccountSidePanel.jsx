@@ -9,7 +9,10 @@ import { FiLogOut } from "react-icons/fi";
 import { AiOutlineSetting } from "react-icons/ai";
 import { useRouter } from 'next/router';
 
-import { userTypeSelector } from '@/store/auth/selector';
+import { userTypeSelector, isLogoutLodingSelector } from '@/store/auth/selector';
+
+import { logoutUser, setIsAuthenticated } from '@/store/auth/slice';
+
 
 import Image from 'next/image';
 
@@ -24,6 +27,9 @@ const AccountSidePanel = () => {
     return state.sideDrower.open;
   })
 
+  const isLogoutLoding = useSelector(isLogoutLodingSelector);
+
+
   const user_type = useSelector(userTypeSelector);
 
   const myLoader = ({ src, width, quality }) => {
@@ -36,19 +42,27 @@ const AccountSidePanel = () => {
         <AiOutlineClose className="text-2xl text-gray-500 " onClick={() => dispatch(openToggle(open))} />
       </div>
       <div className="flex flex-row w-full mt-2 pr-5 cursor-pointer" onClick={() => {
-        if(user_type==="Employee")
-        {
+        if (user_type === "Employee") {
           router.push("/wuser/profile")
         }
-        if(user_type==="Employeer")
-        {
+        if (user_type === "Employeer") {
           router.push("/wpuser/profile")
+        }
+        if (user_type == undefined || user_type == "" || user_type == null) {
+          let utype = localStorage.getItem("utype");
+          console.log(utype);
+          if (utype === "Employee") {
+            router.push("/wuser/profile")
+          }
+          if (utype === "Employeer") {
+            router.push("/wpuser/profile")
+          }
         }
         dispatch(openToggle(open))
       }}>
         <div className="flex flex-col relative rounded-full w-[35%] h-24 bg-red-300">
           {/* <FaUserCircle className="text-8xl text-gray-300" /> */}
-          <Image alt="no image" fill={true} className="rounded-full" loader={myLoader} src="https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q="/>
+          <Image alt="no image" fill={true} className="rounded-full" loader={myLoader} src="https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q=" />
         </div>
         <div className="flex flex-col mt-2 ml-2 ">
           <h1 className="text-xl font-semibold">Swapnil Kulkarni</h1>
@@ -56,14 +70,23 @@ const AccountSidePanel = () => {
         </div>
       </div>
       <div className="flex flex-col mt-5 w-full">
-        <div onClick={()=>{
-          if(user_type==="Employee")
-          {
+        <div onClick={() => {
+          // console.log(user_type);
+          if (user_type === "Employee") {
             router.push("/wuser/profile/updateprofile")
           }
-          if(user_type==="Employeer")
-          {
+          if (user_type === "Employeer") {
             router.push("/wpuser/profile/updateprofile")
+          }
+          if (user_type == undefined || user_type == "" || user_type == null) {
+            let utype = localStorage.getItem("utype");
+            console.log(utype)
+            if (utype === "Employee") {
+              router.push("/wuser/profile/updateprofile")
+            }
+            if (utype === "Employeer") {
+              router.push("/wpuser/profile/updateprofile")
+            }
           }
           dispatch(openToggle(open))
         }} className={`border-2 hover:cursor-pointer px-10 py-5 mr-5 rounded-2xl`}>
@@ -81,7 +104,13 @@ const AccountSidePanel = () => {
 
         <div className="flex flex-row mt-5 items-center cursor-pointer">
           <FiLogOut className="text-xl mr-3 text-[#8294bb]" />
-          <h1 className="text-sm text-gray-600">Logout</h1>
+          <h1 onClick={() => {
+            dispatch(logoutUser());
+            dispatch(setIsAuthenticated(false));
+            localStorage.removeItem("utype");
+            localStorage.removeItem("uid");
+            router.replace("/login");
+          }} className="text-sm text-gray-600">Logout</h1>
         </div>
       </div>
     </div>

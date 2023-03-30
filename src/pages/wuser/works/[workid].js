@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image';
 import { BiMap } from "react-icons/bi";
 import { BsStopwatch } from "react-icons/bs";
@@ -8,13 +8,21 @@ import { RxCounterClockwiseClock } from "react-icons/rx";
 import { FaBookmark } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa";
 import { useRouter } from 'next/router';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import FNavbar from '@/components/FNavbar';
 import AccountSidePanel from '@/components/AccountSidePanel';
 
 import { userIdSelector } from '@/store/auth/selector';
 
 import { applyWork } from '@/store/applyWork/slice';
+
+
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+//store imports
+import { fetchWorkPost } from '@/store/workprovider/workpost/slice';
+import { workPostSelector, workPostLoadingSelector } from '@/store/workprovider/workpost/selector';
 
 const Workpage = () => {
 
@@ -24,9 +32,9 @@ const Workpage = () => {
 
     const dispatch = useDispatch();
 
-    const [isApplied,setIsApplied] = useState(false);
+    const [isApplied, setIsApplied] = useState(false);
 
-    const [isWorkRequestFromEmployeer,setIsWorkRequestFromEmployeer] = useState(false);
+    const [isWorkRequestFromEmployeer, setIsWorkRequestFromEmployeer] = useState(false);
 
     const userId = useSelector(userIdSelector);
 
@@ -34,30 +42,103 @@ const Workpage = () => {
 
     const router = useRouter();
 
-    const data = router.query;
+    //const data = router.query;
+
+    dayjs.extend(relativeTime);
 
 
-    console.log(data);
-    console.log(userId);
+    const [uid, setUid] = useState("");
 
-    if(data.applicationId)
-    {
-        console.log("it consists");
-        for(let i = 0; i<data.applicationId.length; i++)
-        {
-            if(data.applicationId[i]===userIdSelector)
-            {
-                console.log("yes you applied");
-                setIsApplied(true);
+    useEffect(() => {
+        dispatch(fetchWorkPost({
+            workid: router.query.workid
+        }));
+
+        setUid(localStorage.getItem("uid"));
+
+
+    }, [router.query.workid]);
+
+    const data = useSelector(workPostSelector);
+
+    const dataLoading = useSelector(workPostLoadingSelector);
+
+    let postTime;
+    if (data != undefined) {
+        postTime = dayjs(data.postTime).fromNow();
+    }
+
+
+
+
+    const onBtnApplyClicked = () => {
+        dispatch(applyWork(router.query.workid));
+    }
+
+    function checkUserApplied() {
+
+        // let uid = localStorage.getItem("uid");
+
+        let isStoreUidEmpty = false;
+
+        if (userId == undefined || userId == "" || userId == null) {
+            isStoreUidEmpty = true;
+        }
+
+        if (data.applicationId != undefined) {
+            for (let i = 0; i < data.applicationId.length; i++) {
+
+                // if (data.applicationId[i] === uid) {
+                //     return true;
+                // }
+
+                if (isStoreUidEmpty) {
+                    if (data.applicationId[i] === uid) {
+                        return true;
+                    }
+                } else {
+                    if (data.applicationId[i] === userId) {
+                        return true;
+                    }
+                }
             }
         }
+        return false;
     }
 
-    const onBtnApplyClicked = ()=>{
-        console.log("clicked");
-        dispatch(applyWork(data.workid));
+    function checkUserAssigned() {
+
+        // let uid = localStorage.getItem("uid");
+
+        let isStoreUidEmpty = false;
+
+        if (userId == undefined || userId == "" || userId == null) {
+            isStoreUidEmpty = true;
+        }
+
+        if (data.assignedId != undefined) {
+            for (let i = 0; i < data.assignedId.length; i++) {
+                // if (data.assignedId[i] === uid) {
+                //     return true;
+                // }
+
+                if (isStoreUidEmpty) {
+                    if (data.assignedId[i] === uid) {
+                        return true;
+                    }
+                } else {
+                    if (data.assignedId[i] === userId) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
+    if (dataLoading || data == undefined) {
+        return <h1>Loading</h1>
+    }
     return (
         <div className="flex flex-col h-auto bg-[#f7f7f7]">
             <FNavbar />
@@ -87,11 +168,9 @@ const Workpage = () => {
                         <div className="flex flex-row items-center mt-2">
                             <BsStopwatch className="text-lg text-[#696977] mr-2" />
                             <h1 className="text-sm text-[#696977]">{data.workDuration}</h1>
-                            {/* <div className="flex flex-row ml-2 gap-x-2">
-                                <h1 className="text-sm text-[#696977] ">11:30</h1>
-                                <h1 className="text-sm text-[#696977] ">to</h1>
-                                <h1 className="text-sm text-[#696977] ">1:30</h1>
-                            </div> */}
+                            <div className="flex flex-row ml-2 gap-x-2">
+                                <h1 className="text-sm text-[#696977] ">{data.workTime}</h1>
+                            </div>
                         </div>
                         <div className="flex flex-row items-center mt-2">
                             <AiOutlineCalendar className="text-lg text-[#696977] mr-2" />
@@ -100,17 +179,17 @@ const Workpage = () => {
                         <div className="flex flex-row mt-7">
                             {
                                 isWorkRequestFromEmployeer ? <button className="px-5 py-1 bg-green-400 text-white font-semibold hover:shadow-xl">ACCEPT</button>
-                                :
-                                isApplied ? <button className="px-5 py-1 border border-[#4a90e2] text-[#4a90e2] font-semibold mr-5 hover:shadow-xl">APPLIED</button>
-                                :
-                                <button onClick={onBtnApplyClicked} className="px-5 py-1 bg-[#4a90e2] text-white font-semibold mr-5 hover:shadow-xl">APPLY</button>
+                                    :
+                                    checkUserApplied() ? checkUserAssigned() ? <button className="px-5 py-1 border border-green-500 text-green-500 font-semibold mr-5 hover:shadow-inner">ACCEPTED</button> : <button className="px-5 py-1 border border-[#4a90e2] text-[#4a90e2] font-semibold mr-5 hover:shadow-inner">APPLIED</button>
+                                        :
+                                        <button onClick={onBtnApplyClicked} className="px-5 py-1 bg-[#4a90e2] text-white font-semibold mr-5 hover:shadow-xl">APPLY</button>
                             }
-                            
-                            
+
+
 
                             <div className='flex flex-row ml-auto self-end'>
                                 <h1 className="text-sm text-[#696977]">posted:</h1>
-                                <h1 className="text-sm text-gray-900 font-semibold">&nbsp; {data.postTime}</h1>
+                                <h1 className="text-sm text-gray-900 font-semibold">&nbsp; {postTime}</h1>
                             </div>
 
                         </div>

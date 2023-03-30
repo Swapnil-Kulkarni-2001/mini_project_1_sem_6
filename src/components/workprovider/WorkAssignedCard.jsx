@@ -1,13 +1,12 @@
 import React from 'react'
 import Image from 'next/image'
 
-const WorkApplicationCard = ({ data, assigned }) => {
-
+const WorkAssignedCard = ({ emp_id, name, phone }) => {
     const myLoader = ({ src, width, quality }) => {
         return `https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q=`
     }
 
-    console.log(assigned);
+
 
     return (
         <div className="flex flex-col p-5 border">
@@ -21,17 +20,10 @@ const WorkApplicationCard = ({ data, assigned }) => {
                 </div>
 
                 <div className="flex flex-col self-start ml-4 ">
-                    <h1 className="text-base font-semibold">{data.name}</h1>
-                    <h1 className="text-sm font-semibold text-gray-600">{data.phone}</h1>
+                    <h1 className="text-base font-semibold">{name}</h1>
+                    <h1 className="text-xs font-semibold text-gray-600">{phone}</h1>
                     <div className='flex flex-row mt-2'>
-
-                        {
-                            assigned ? <button className="px-3 py-[2px] border border-[#4a90e2] hover:bg-blue-100 text-sm text-[#4a90e2] mr-3">ACCEPTED</button>
-                                :
-                                <button className="px-3 py-[2px] bg-[#4a90e2] text-sm text-white mr-3">ACCEPT</button>
-                        }
-
-                        {/* <button className="px-3 py-[2px] bg-red-500 text-sm text-white">REJECT</button> */}
+                        <button className="px-3 py-[1px] border border-red-500 text-sm font-semibold text-red-500 hover:bg-red-500 hover:text-white">remove</button>
                     </div>
                 </div>
 
@@ -41,4 +33,4 @@ const WorkApplicationCard = ({ data, assigned }) => {
     )
 }
 
-export default WorkApplicationCard
+export default WorkAssignedCard
