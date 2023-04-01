@@ -16,6 +16,19 @@ export const fetchRecommendedWorks = createAsyncThunk("fetchRecommendedWorks", a
 
 });
 
+export const fetchInvitationList = createAsyncThunk("fetchInvitationList",async()=>{
+
+    try {
+        const resp = await axios.get("/employee/invitaionList");
+
+        //console.log(resp.data);
+        return resp.data;
+    } catch (error) {
+        console.error(error);
+    }
+
+});
+
 const initialState = {
     recommendedWorks: [],
     recommendedWorksLoading: false,
@@ -38,8 +51,12 @@ const workSlice = createSlice({
 
         builder.addCase(fetchRecommendedWorks.fulfilled, (state, { payload }) => {
         
-            state.recommendedWorks = payload.recommendationData;
-            state.recommendedWorksLoading = false;
+            try{
+                state.recommendedWorks = payload.recommendationData;
+                state.recommendedWorksLoading = false;
+            }catch(err){
+                console.log(err);
+            }
 
         });
 
@@ -47,6 +64,23 @@ const workSlice = createSlice({
             state.recommendedWorksLoading = false;
         });
 
+
+        //fetch invitation list
+
+        builder.addCase(fetchInvitationList.pending,(state,action)=>{
+            state.invitedWorksLoading = true;
+        });
+
+        builder.addCase(fetchInvitationList.fulfilled,(state,{payload})=>{
+            state.invitedWorksLoading = false;
+            if(payload!=null || payload!=undefined){
+                state.invitedWorks = payload.data;
+            }
+        });
+
+        builder.addCase(fetchInvitationList.rejected,(state,action)=>{
+            state.invitedWorksLoading = false;
+        });
 
     }
 });

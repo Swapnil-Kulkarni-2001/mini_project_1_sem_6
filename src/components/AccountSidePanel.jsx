@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AiOutlineClose } from "react-icons/ai";
 import { useDispatch, useSelector } from 'react-redux';
 import { openToggle } from '@/store/accountSidePanel/slice';
@@ -9,9 +9,14 @@ import { FiLogOut } from "react-icons/fi";
 import { AiOutlineSetting } from "react-icons/ai";
 import { useRouter } from 'next/router';
 
-import { userTypeSelector, isLogoutLodingSelector } from '@/store/auth/selector';
+import { userTypeSelector, isLogoutLodingSelector, profilePicSelector, profilePicLoadingSelector } from '@/store/auth/selector';
 
-import { logoutUser, setIsAuthenticated } from '@/store/auth/slice';
+import { logoutUser, setIsAuthenticated, fetchProfilePicEmp, fetchProfilePicEmplr } from '@/store/auth/slice';
+
+import { fetchUserInfoEmp, fetchUserInfoEmplr } from '@/store/userInfo/slice';
+
+import { userInfoDataSelector } from '@/store/userInfo/selector';
+
 
 
 import Image from 'next/image';
@@ -29,19 +34,41 @@ const AccountSidePanel = () => {
 
   const isLogoutLoding = useSelector(isLogoutLodingSelector);
 
+  const userData = useSelector(userInfoDataSelector);
+
+  useEffect(() => {
+    let utype = localStorage.getItem("utype");
+    if (utype === "Employee") {
+      console.log("in effect accountpanel", utype)
+      dispatch(fetchProfilePicEmp);
+      dispatch(fetchUserInfoEmp);
+    }
+    if (utype === "Employeer") {
+      console.log("in effect accountpanel", utype)
+      dispatch(fetchProfilePicEmplr);
+      dispatch(fetchUserInfoEmplr);
+    }
+  }, []);
+
 
   const user_type = useSelector(userTypeSelector);
 
-  const myLoader = ({ src, width, quality }) => {
-    return `https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q=`
-  }
+
+  const profilePic = useSelector(profilePicSelector);
+
+
+  console.log(profilePic, "acccc");
+
+
+
+
 
   return (
     <div className="flex flex-col items-center h-full rounded-tl-3xl rounded-bl-3xl bg-white shadow-2xl py-5 px-5">
       <div className="flex flex-row ml-auto">
         <AiOutlineClose className="text-2xl text-gray-500 " onClick={() => dispatch(openToggle(open))} />
       </div>
-      <div className="flex flex-row w-full mt-2 pr-5 cursor-pointer" onClick={() => {
+      <div className="flex flex-row w-full mt-2 pr-5 cursor-pointer " onClick={() => {
         if (user_type === "Employee") {
           router.push("/wuser/profile")
         }
@@ -60,13 +87,16 @@ const AccountSidePanel = () => {
         }
         dispatch(openToggle(open))
       }}>
-        <div className="flex flex-col relative rounded-full w-[35%] h-24 bg-red-300">
-          {/* <FaUserCircle className="text-8xl text-gray-300" /> */}
-          <Image alt="no image" fill={true} className="rounded-full" loader={myLoader} src="https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q=" />
+        <div className="flex flex-col relative rounded-full basis-[30%] h-24">
+          {
+            profilePic == "" || profilePic == undefined ? <FaUserCircle className="text-8xl text-[#d8d8d8]" />
+              :
+              <Image loader={() => profilePic} src={profilePic} alt="no image" fill={true} className="rounded-full" />
+          }
         </div>
         <div className="flex flex-col mt-2 ml-2 ">
-          <h1 className="text-xl font-semibold">Swapnil Kulkarni</h1>
-          <h1 className="text-sm text-gray-600">near sadhana highschool gadhinglaj</h1>
+          <h1 className="text-xl font-semibold">{userData.name}</h1>
+          <h1 className="text-sm text-gray-600">{userData.phone}</h1>
         </div>
       </div>
       <div className="flex flex-col mt-5 w-full">
@@ -109,6 +139,7 @@ const AccountSidePanel = () => {
             dispatch(setIsAuthenticated(false));
             localStorage.removeItem("utype");
             localStorage.removeItem("uid");
+            dispatch(openToggle(open));
             router.replace("/login");
           }} className="text-sm text-gray-600">Logout</h1>
         </div>

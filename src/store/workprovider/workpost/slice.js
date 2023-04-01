@@ -149,7 +149,7 @@ const workPostSlice = createSlice({
 
             state.allWorkPost = [];
 
-            if (payload.data != undefined) {
+            if (payload!= undefined) {
                 for (let i = 0; i < payload.data.length; i++) {
                     state.allWorkPost.push(payload.data[i][0]);
                 }

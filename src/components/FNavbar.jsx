@@ -46,7 +46,7 @@ const FNavbar = () => {
 
 
                 {
-                    profilePic == "" ? <FaUserCircle className="text-3xl text-gray-300" />
+                    profilePic == "" || profilePic == undefined? <FaUserCircle className="text-3xl text-gray-300" />
                         :
                         <div className="bg-white rounded-full relative h-8 w-8 ">
                             <Image loader={() => profilePic} src={profilePic} alt="no image" fill={true} className="rounded-full" />

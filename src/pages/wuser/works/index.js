@@ -8,6 +8,11 @@ import { fetchAllWorks } from '@/store/public/slice';
 import { dataSelector } from '@/store/public/selector';
 import { useEffect,useState } from 'react';
 
+
+import { fetchProfilePicEmp } from '@/store/auth/slice';
+import { profilePicSelector, profilePicLoadingSelector } from '@/store/auth/selector';
+
+
 const AllJobs = () => {
 
 
@@ -22,6 +27,15 @@ const AllJobs = () => {
     const dispatch = useDispatch();
 
     const allWork_data = useSelector(dataSelector);
+
+    const profilePic = useSelector(profilePicSelector);
+
+    const profilePicLoading = useSelector(profilePicLoadingSelector);
+
+    useEffect(() => {
+        dispatch(fetchProfilePicEmp());
+    }, []);
+
 
     useEffect(() => {
         if (!navigator.geolocation) {

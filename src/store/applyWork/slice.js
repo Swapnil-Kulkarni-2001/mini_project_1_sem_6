@@ -23,6 +23,7 @@ export const applyWork = createAsyncThunk("applyWork",async (data)=>{
 
 const initialState = {
     isApplyWorkLoading : false,
+    applyRespData : "",
 };
 
 const applyWorkSlice = createSlice({
@@ -38,6 +39,7 @@ const applyWorkSlice = createSlice({
         builder.addCase(applyWork.fulfilled,(state,{payload})=>{
             state.isApplyWorkLoading = false;
             console.log("fullfiled");
+            state.applyRespData = payload
             console.log(payload);
         });
 

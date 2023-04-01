@@ -24,10 +24,20 @@ import WorkAssignedCard from '@/components/workprovider/WorkAssignedCard';
 //icons
 import { AiOutlineClose } from "react-icons/ai";
 
+//store
+
+import { fetchProfilePicEmplr } from '@/store/auth/slice';
+import { profilePicSelector, profilePicLoadingSelector } from '@/store/auth/selector';
+
+import { fetchUserInfoEmplr } from '@/store/userInfo/slice';
+import { userInfoDataSelector, userInfoDataLoadingSelector } from '@/store/userInfo/selector';
+
 
 const postworkid = () => {
 
     const [assignedListModel, setAssignedListModel] = useState(false);
+
+    const [reloadData, setReloadData] = useState(0);
 
     const open = useSelector((state) => {
         return state.sideDrower.open;
@@ -42,6 +52,11 @@ const postworkid = () => {
     const applicantList = useSelector(applicantListSelector);
 
     const assignedList = useSelector(assignedListSelector);
+
+
+    const profilePic = useSelector(profilePicSelector);
+
+    const userInfoData = useSelector(userInfoDataSelector);
 
     //console.log(applicantList[0]);
 
@@ -78,13 +93,16 @@ const postworkid = () => {
             }));
         }
 
-    }, [router.query.postworkid]);
+        dispatch(fetchProfilePicEmplr());
+        dispatch(fetchUserInfoEmplr());
+
+    }, [router.query.postworkid, reloadData]);
 
     //console.log(data);
 
     const [bookmark, setBookmark] = useState(false);
 
-    let count = 0;
+
 
     const onBtnDeleteClicked = () => {
         dispatch(deleteWorkPost({
@@ -104,7 +122,7 @@ const postworkid = () => {
 
     function checkAssignList(emp_id) {
         for (let i = 0; i < assignedList.length; i++) {
-            if (applicantList[i]._id === emp_id) {
+            if (assignedList[i]._id === emp_id) {
                 return true;
             }
         }
@@ -114,6 +132,9 @@ const postworkid = () => {
 
 
 
+    const reload = () => {
+        setReloadData(reloadData + 1);
+    }
 
 
     return (
@@ -184,7 +205,7 @@ const postworkid = () => {
                         <WorkApplicationCard /> */}
                         {
                             applicantList.map((item, key) =>
-                                <WorkApplicationCard assigned={checkAssignList(item._id)} data={item} />
+                                <WorkApplicationCard assigned={checkAssignList(item._id)} reload={reload} workid={data._id} data={item} />
                             )
 
                         }
@@ -193,7 +214,7 @@ const postworkid = () => {
 
                 <div className={`absolute ${assignedListModel ? "flex flex-col" : "hidden"} overflow-y-auto  bg-white h-[30rem] w-[30rem] top-0 bottom-0 left-0 right-0 m-auto z-10 drop-shadow-2xl`}>
                     <div className="flex flex-row items-center m-5 self-end">
-                        <AiOutlineClose onClick={()=>setAssignedListModel(false)} className="text-xl cursor-pointer"/>
+                        <AiOutlineClose onClick={() => setAssignedListModel(false)} className="text-xl cursor-pointer" />
                     </div>
                     <div className="flex flex-col gap-y-5 pb-10 px-10">
                         {/* <WorkAssignedCard />
@@ -203,7 +224,7 @@ const postworkid = () => {
                         <WorkAssignedCard />
                         <WorkAssignedCard /> */}
                         {
-                            assignedList.map((item,key)=><WorkAssignedCard emp_id={item._id} name={item.name} phone={item.phone} key={key}/>)
+                            assignedList.map((item, key) => <WorkAssignedCard workid={data._id} reload={reload} emp_id={item._id} name={item.name} phone={item.phone} profileImg={item.profileImg} key={key} />)
                         }
                     </div>
                 </div>

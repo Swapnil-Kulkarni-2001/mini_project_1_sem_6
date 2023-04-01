@@ -16,6 +16,15 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 // import { fetchWorkPostByEmployeer } from '@/store/workPostByEmployeer/slice';
 
+//store
+
+import { fetchProfilePicEmplr } from '@/store/auth/slice';
+import { profilePicSelector, profilePicLoadingSelector } from '@/store/auth/selector';
+
+import { fetchUserInfoEmplr } from '@/store/userInfo/slice';
+import { userInfoDataSelector, userInfoDataLoadingSelector } from '@/store/userInfo/selector';
+
+
 import { postWork, fetchAllWorkPost, fetchWorkPost } from '@/store/workprovider/workpost/slice';
 
 import { allWorkPostSelector, workPostSelector, isLoadingSelector } from '@/store/workprovider/workpost/selector';
@@ -51,15 +60,20 @@ const index = () => {
 
     const allWorkPosts = useSelector(allWorkPostSelector);
 
+    const profilePic = useSelector(profilePicSelector);
+
+    const userInfoData = useSelector(userInfoDataSelector);
   
 
 
+
     useEffect(() => {
-        console.log("called")
         dispatch(fetchAllWorkPost());
+        dispatch(fetchProfilePicEmplr());
+        dispatch(fetchUserInfoEmplr());
     }, []);
 
-    
+
 
     const validatePostDetails = () => {
 
@@ -151,21 +165,21 @@ const index = () => {
                 <div className="flex flex-row h-full px-32 gap-x-20">
                     <div className="flex flex-col gap-y-7 my-10 basis-[65%]">
                         {
-                          
-                                allWorkPosts.map((item, key) => (
-                                    <WorkCard
-                                        // workName={item.workName}
-                                        // workAddress={item.workAddress}
-                                        // workTime={item.workTime}
-                                        // workDuration={item.workDuration}
-                                        // workFrom={item.workFrom}
-                                        // postTime={item.postTime}
-                                        // isBookMarked={false}
-                                        // workid={item._id}
-                                        data={item}
-                                        key={key} />
-                                ))
-                            
+
+                            allWorkPosts.map((item, key) => (
+                                <WorkCard
+                                    // workName={item.workName}
+                                    // workAddress={item.workAddress}
+                                    // workTime={item.workTime}
+                                    // workDuration={item.workDuration}
+                                    // workFrom={item.workFrom}
+                                    // postTime={item.postTime}
+                                    // isBookMarked={false}
+                                    // workid={item._id}
+                                    data={item}
+                                    key={key} />
+                            ))
+
                         }
                     </div>
 

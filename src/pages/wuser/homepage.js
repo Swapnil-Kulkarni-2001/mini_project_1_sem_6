@@ -11,12 +11,14 @@ import Image from 'next/image';
 
 
 //store imports
-import { fetchRecommendedWorks } from '@/store/worker/work/slice';
-import { recommendedWorksSelector, recommendedWorksLoadingSelector } from '@/store/worker/work/selector';
+import { fetchRecommendedWorks, fetchInvitationList } from '@/store/worker/work/slice';
+import { recommendedWorksSelector, recommendedWorksLoadingSelector, invitedWorksSelector, invitedWorksLoadingSelector } from '@/store/worker/work/selector';
 
 import { fetchProfilePicEmp } from '@/store/auth/slice';
 import { profilePicSelector, profilePicLoadingSelector } from '@/store/auth/selector';
 
+import { fetchUserInfoEmp } from '@/store/userInfo/slice';
+import { userInfoDataSelector,userInfoDataLoadingSelector } from '@/store/userInfo/selector';
 
 const homepage = () => {
 
@@ -37,14 +39,21 @@ const homepage = () => {
 
     useEffect(() => {
         dispatch(fetchRecommendedWorks());
+        dispatch(fetchInvitationList());
         dispatch(fetchProfilePicEmp());
+        dispatch(fetchUserInfoEmp());
     }, []);
 
     const recommendedWorks = useSelector(recommendedWorksSelector);
     const recommendedWorksLoading = useSelector(recommendedWorksLoadingSelector);
 
-    console.log(recommendedWorks, " ", recommendedWorksLoading);
+    const invitaionList = useSelector(invitedWorksSelector);
+    const invitaionListLoading = useSelector(invitedWorksLoadingSelector);
 
+    const userInfoData = useSelector(userInfoDataSelector);
+    const userInfoDataLoading = useSelector(userInfoDataLoadingSelector);
+
+    console.log(userInfoData);
 
     return (
         <div className="flex flex-col relative h-auto overflow-x-hidden bg-[#f5f5f5]">
@@ -63,12 +72,12 @@ const homepage = () => {
                 <div className="flex flex-col  md:px-40 py-10 overflow-x-hidden">
                     <div className="flex flex-row ">
                         <div className="flex flex-col bg-white w-[25rem] items-center md:py-8 md:px-5 border rounded-xl">
-                            <div>
+                            <div className="">
                                 {/* <FaUserCircle className="text-8xl text-gray-300" /> */}
-                                <div className="bg-white rounded-full relative h-28 w-28 ">
+                                <div className="rounded-full relative h-28 w-28 ">
                                     {/* <FaUserCircle className="text-8xl text-[#d8d8d8]" /> */}
                                     {
-                                        profilePic == "" ? <FaUserCircle className="text-8xl text-[#d8d8d8]" />
+                                        profilePic == "" ? <FaUserCircle className="text-[7rem] text-[#d8d8d8]" />
                                             :
                                             <Image loader={() => profilePic} src={profilePic} alt="no image" fill={true} className="rounded-full" />
                                     }
@@ -76,8 +85,8 @@ const homepage = () => {
                                 </div>
                             </div>
                             <div className="flex flex-col mt-2 ml-2">
-                                <h1 className="text-lg font-semibold text-center">Swapnil Kulkarni</h1>
-                                <h1 className="text-sm text-center text-gray-600 font-bold">Worker</h1>
+                                <h1 className="text-lg font-semibold text-center">{userInfoData.name}</h1>
+                                <h1 className="text-sm text-center text-gray-600 font-bold">{userInfoData.occuopation}</h1>
                                 <h1 className="text-sm text-gray-600 text-center">near sadhana highschool gadhinglaj</h1>
 
                             </div>
@@ -139,6 +148,11 @@ const homepage = () => {
                                             )
                                         })
                                     }
+                                    {
+                                        recommendedWorks == "" || recommendedWorks == [] || recommendedWorks == undefined ?
+                                            <h1 className="text-base text-center m-auto mt-5 text-gray-500">No recommendation now, add some profession to see recommendation</h1>
+                                            : null
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -150,9 +164,37 @@ const homepage = () => {
                             <h1 className="text-lg text-blue-500 cursor-pointer">view all</h1>
                         </div>
                         <div className='flex flex-row gap-x-10 h-full mt-5 overflow-x-auto scrollbar'>
+                            {/* <WorkCard />
                             <WorkCard />
-                            <WorkCard />
-                            <WorkCard />
+                            <WorkCard /> */}
+
+                            {
+                                invitaionList.map((item, key) => {
+                                    if (key > 1 || item == null) {
+                                        return;
+                                    }
+                                    return (
+                                        <WorkCard
+                                            workName={item.workName}
+                                            employeerName={item.employeerName}
+                                            workAddress={item.workAddress}
+                                            workDuration={item.workDuration}
+                                            workTime={item.workTime}
+                                            workDescription={item.workDescription}
+                                            workFrom={item.workFrom}
+                                            postTime={item.postTime}
+                                            employeerId={item.employeerId}
+                                            workId={item._id}
+                                            // data={item}
+                                            key={key} />
+                                    )
+                                })
+                            }
+                            {
+                                invitaionList == "" || invitaionList == [] || invitaionList == undefined || invitaionList == null ?
+                                    <h1 className="text-base text-center m-auto my-14 text-gray-500">No invitaion list now, you will get notified here when someone request you</h1>
+                                    : null
+                            }
                         </div>
                     </div>
                 </div>

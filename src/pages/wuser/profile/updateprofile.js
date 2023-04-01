@@ -1,20 +1,116 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import FNavbar from '@/components/FNavbar'
-import { useSelector } from 'react-redux'
+import { FaUserCircle } from "react-icons/fa";
+import { useSelector, useDispatch } from 'react-redux'
 import AccountSidePanel from '@/components/AccountSidePanel'
 import Image from 'next/image'
+import axios from '../../../Axios/axios';
+
+//store imports
+import { fetchProfilePicEmp } from '@/store/auth/slice';
+import { profilePicSelector, profilePicLoadingSelector } from '@/store/auth/selector';
+
 
 
 const updateprofile = () => {
+
+
+
 
     const open = useSelector((state) => {
         return state.sideDrower.open;
     })
 
 
-    const myLoader = ({ src, width, quality }) => {
-        return `https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q=`
+
+    const dispatch = useDispatch();
+
+    const inpNumRef = useRef();
+
+    const inpAddrRef = useRef();
+
+    const inpInstaRef = useRef();
+
+    const inpFaceRef = useRef();
+
+    useEffect(() => {
+        dispatch(fetchProfilePicEmp());
+        async function fetchUserData() {
+            try {
+                const resp = await axios.get("/employee/personalInfo");
+                console.log(resp.data, " fff");
+                inpNumRef.current.value = resp.data.data.phone;
+                inpAddrRef.current.value = resp.data.data.address;
+                inpInstaRef.current.value = resp.data.data.instagram;
+                inpFaceRef.current.value = resp.data.data.facebook;
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        fetchUserData();
+    }, []);
+
+    const profilePic = useSelector(profilePicSelector);
+
+    const profilePicLoading = useSelector(profilePicLoadingSelector);
+
+    const ref = useRef()
+
+    const onBtnUploadImgClicked = (e) => {
+        ref.current.click()
     }
+
+    const uploadProfImage = async (e) => {
+        let resp;
+        console.log(e.target.files[0]);
+        if (e.target.files[0] != undefined) {
+            const formData = new FormData();
+            formData.append("image", e.target.files[0]);
+            try {
+                resp = await axios.post("/employee/uploadProfileImg", formData);
+                console.log(resp.data);
+                if (resp.data.status == "succesfully profile photo uploaded") {
+                    dispatch(fetchProfilePicEmp());
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
+
+
+
+    const uploadFormData = async () => {
+
+
+        if (inpAddrRef.current.value == null || inpNumRef.current.value == null
+            || inpInstaRef.current.value == null || inpFaceRef.current.value == null
+
+            || inpAddrRef.current.value == "" || inpNumRef.current.value == ""
+            || inpInstaRef.current.value == "" || inpFaceRef.current.value == ""
+
+            || inpAddrRef.current.value == undefined || inpNumRef.current.value == undefined
+            || inpInstaRef.current.value == undefined || inpFaceRef.current.value == undefined) {
+
+                return;
+        }
+        try {
+            const resp = await axios.post("/employee/profileUpdate", {
+                address: inpAddrRef.current.value,
+                phone: inpNumRef.current.value,
+                Insta: inpInstaRef.current.value,
+                facebook: inpFaceRef.current.value
+            });
+
+            console.log(resp.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+
 
     return (
         <div className="flex flex-col relative h-[100vh] overflow-x-hidden bg-[#f8f8f8]">
@@ -38,14 +134,18 @@ const updateprofile = () => {
                         </div>
                         <div className="mt-5">
                             {/* <FaUserCircle className="text-8xl text-gray-300" /> */}
-                            <div className="bg-white rounded-full relative h-32 w-32 ">
-                                {/* <FaUserCircle className="text-8xl text-[#d8d8d8]" /> */}
-                                <Image alt="no image" fill={true} className="rounded-full" loader={myLoader} src="https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q=" />
-                            </div>
-                        </div>
 
+                            {
+                                profilePic == "" || profilePic == undefined ? <FaUserCircle className="text-9xl text-gray-300" />
+                                    :
+                                    <div className="bg-white rounded-full relative h-32 w-32 ">
+                                        <Image loader={() => profilePic} src={profilePic} alt="no image" fill={true} className="rounded-full" />
+                                    </div>
+                            }
+                        </div>
                         <div className="mt-5">
-                            <button className="bg-[#ff3d17] px-5 py-1 text-white rounded-lg text-lg font-semibold">Upload new photo</button>
+                            <button onClick={onBtnUploadImgClicked} className="bg-[#ff3d17] px-5 py-1 text-white rounded-lg text-lg font-semibold">Upload new photo</button>
+                            <input ref={ref} type="file" className="hidden" accept="image/png,image/jpeg" onChange={(e) => uploadProfImage(e)} />
                         </div>
 
                         <div className="flex flex-col text-sm text-gray-600 bg-[#f1f4fd] border-2 text-center items-center p-5 rounded-2xl mt-5">
@@ -65,11 +165,11 @@ const updateprofile = () => {
 
                             <div className="flex flex-col">
                                 <label className="text-xs font-semibold">Whatsapp number</label>
-                                <input type="tel" placeholder="your whatsapp mobile number" className="p-2 border mt-2 focus:outline-blue-500" required />
+                                <input ref={inpNumRef} type="tel" placeholder="your whatsapp mobile number" className="p-2 border mt-2 focus:outline-blue-500" required />
                             </div>
                             <div className="flex flex-col mt-5">
                                 <label className="text-xs font-semibold">Address</label>
-                                <input type="text" placeholder="your current address" className="p-2 border mt-2 focus:outline-blue-500" required />
+                                <input ref={inpAddrRef} type="text" placeholder="your current address" className="p-2 border mt-2 focus:outline-blue-500" required />
                             </div>
 
                             <div className="flex flex-col mt-5 border rounded-md pb-5">
@@ -81,17 +181,17 @@ const updateprofile = () => {
                                 <div className="flex flex-row items-center gap-x-5 mt-5 px-5">
                                     <div className="flex flex-col basis-1/2">
                                         <label className="text-xs font-semibold">Instagram</label>
-                                        <input type="url" placeholder="instagram account link" className="p-2 border mt-2 focus:outline-blue-500" required />
+                                        <input ref={inpInstaRef} type="url" placeholder="instagram account link" className="p-2 border mt-2 focus:outline-blue-500" required />
                                     </div>
                                     <div className="flex flex-col basis-1/2">
                                         <label className="text-xs font-semibold">Facebook</label>
-                                        <input type="url" placeholder="facebook account link" className="p-2 border mt-2 focus:outline-blue-500" required />
+                                        <input ref={inpFaceRef} type="url" placeholder="facebook account link" className="p-2 border mt-2 focus:outline-blue-500" required />
                                     </div>
                                 </div>
                             </div>
 
                             <div className="mt-5">
-                                <button className="bg-[#ff3d17] px-5 py-1 text-white rounded-lg text-lg font-semibold">update info</button>
+                                <button onClick={uploadFormData} className="bg-[#ff3d17] px-5 py-1 text-white rounded-lg text-lg font-semibold">update info</button>
                             </div>
 
                         </div>

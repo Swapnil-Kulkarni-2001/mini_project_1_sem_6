@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaUserCircle } from "react-icons/fa";
 import { HiMenuAlt2 } from "react-icons/hi";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -8,17 +8,29 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openToggle } from '@/store/accountSidePanel/slice';
 import Image from 'next/image';
 
+import { fetchProfilePicEmplr } from '@/store/auth/slice';
+import { profilePicSelector, profilePicLoadingSelector } from '@/store/auth/selector';
+
+// import { fetchUserInfoEmplr } from '@/store/userInfo/slice';
+// import { userInfoDataSelector, userInfoDataLoadingSelector } from '@/store/userInfo/selector';
+
 const Navbar = () => {
     const dispatch = useDispatch();
 
     const open = useSelector((state) => {
         return state.sideDrower.open;
     })
+    const profilePic = useSelector(profilePicSelector);
+
+    //const userInfoData = useSelector(userInfoDataSelector);
 
 
-    const myLoader = ({ src, width, quality }) => {
-        return `https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q=`
-    }
+    useEffect(() => {
+        dispatch(fetchProfilePicEmplr());
+        // dispatch(fetchUserInfoEmplr());
+    }, []);
+
+
 
     return (
         <div className="py-2 px-5 md:px-40 flex flex-row items-center bg-white ">
@@ -27,7 +39,7 @@ const Navbar = () => {
             </div>
             <div className="text-sm flex flex-row ml-auto">
                 <div className='border-4 py-1 rounded-md border-white mr-10  hover:border-b-[#ff7555]'>
-                    <Link href="" className="text-gray-600  hover:text-black font-semibold text-md">find workers</Link>
+                    <Link href="/wpuser/workers" className="text-gray-600  hover:text-black font-semibold text-md">find workers</Link>
                 </div>
                 <div className='border-4 py-1 rounded-md border-white  hover:border-b-[#ff7555]'>
                     <Link href="/wpuser/postworks" className="text-gray-600  hover:text-black font-semibold text-md">post works</Link>
@@ -44,9 +56,15 @@ const Navbar = () => {
 
             <div onClick={() => dispatch(openToggle(open))} className="ml-10 bg-white border-2 cursor-pointer border-gray-300 w-20 py-1 px-2 rounded-3xl flex flex-row items-center">
                 {/* <FaUserCircle className="text-3xl text-gray-300" /> */}
-                <div className="bg-white rounded-full relative h-8 w-8 ">
-                    <Image alt="no image" fill={true} className="rounded-full" loader={myLoader} src="https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q=" />
-                </div>
+
+                {
+                    profilePic == "" ? <FaUserCircle className="text-3xl text-gray-300" />
+                        :
+                        <div className="bg-white rounded-full relative h-8 w-8 ">
+                            <Image loader={() => profilePic} src={profilePic} alt="no image" fill={true} className="rounded-full" />
+                        </div>
+
+                }
                 <HiMenuAlt2 className="text-3xl text-gray-500 ml-auto" />
             </div>
         </div>

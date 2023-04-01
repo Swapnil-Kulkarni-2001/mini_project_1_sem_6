@@ -1,14 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import AccountSidePanel from '@/components/AccountSidePanel'
 import Navbar from '@/components/workprovider/Navbar'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { FaUserCircle } from "react-icons/fa";
 import WorkProviderCard from '@/components/worker/homepage/WorkCard';
 import { AiFillStar } from "react-icons/ai";
 import ProgressBar from '@/components/ProgressBar';
 import Image from 'next/image';
 
+//store
 
+import { fetchProfilePicEmplr } from '@/store/auth/slice';
+import { profilePicSelector, profilePicLoadingSelector } from '@/store/auth/selector';
+
+import { fetchUserInfoEmplr } from '@/store/userInfo/slice';
+import { userInfoDataSelector, userInfoDataLoadingSelector } from '@/store/userInfo/selector';
 
 const homepage = () => {
 
@@ -17,10 +23,19 @@ const homepage = () => {
     return state.sideDrower.open;
   })
 
+  const dispatch = useDispatch();
 
-  const myLoader = ({ src, width, quality }) => {
-    return `https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q=`
-  }
+  const profilePic = useSelector(profilePicSelector);
+
+  const userInfoData = useSelector(userInfoDataSelector);
+
+
+  useEffect(() => {
+    dispatch(fetchProfilePicEmplr());
+    dispatch(fetchUserInfoEmplr());
+  }, []);
+
+  
 
   return (
     <div className="flex flex-col relative h-auto overflow-x-hidden bg-[#f5f5f5] ">
@@ -42,14 +57,17 @@ const homepage = () => {
               <div>
                 {/* <FaUserCircle className="text-8xl text-gray-300" /> */}
                 <div className="bg-white rounded-full relative h-28 w-28 ">
-                  {/* <FaUserCircle className="text-8xl text-[#d8d8d8]" /> */}
-                  <Image alt="no image" fill={true} className="rounded-full" loader={myLoader} src="https://media.istockphoto.com/id/1223044329/photo/confident-man-teacher-wearing-headset-speaking-holding-online-lesson.jpg?s=612x612&w=0&k=20&c=xKYLqKd6obXrUazZg5PDCycrwPiFXHVEJzqi0lxh78Q=" />
+                  {
+                    profilePic == "" ? <FaUserCircle className="text-[7rem] text-[#d8d8d8]" />
+                      :
+                      <Image loader={() => profilePic} src={profilePic} alt="no image" fill={true} className="rounded-full" />
+                  }
                 </div>
               </div>
               <div className="flex flex-col mt-2 ml-2">
-                <h1 className="text-lg font-semibold text-center">Swapnil Kulkarni</h1>
+                <h1 className="text-lg font-semibold text-center">{userInfoData.name}</h1>
                 <h1 className="text-sm text-center text-gray-600 font-bold">Work Provider</h1>
-                <h1 className="text-sm text-gray-600 text-center">near sadhana highschool gadhinglaj</h1>
+                <h1 className="text-sm text-gray-600 text-center">{userInfoData.address}</h1>
               </div>
               <div className="mt-5">
                 <button className="bg-[#457eff] px-5 py-1 rounded-3xl text-white text-lg font-semibold">Complete Profile</button>

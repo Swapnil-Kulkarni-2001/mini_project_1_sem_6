@@ -15,7 +15,7 @@ import AccountSidePanel from '@/components/AccountSidePanel';
 import { userIdSelector } from '@/store/auth/selector';
 
 import { applyWork } from '@/store/applyWork/slice';
-
+import { applyRespDataSelector } from '@/store/applyWork/selector';
 
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -23,6 +23,9 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 //store imports
 import { fetchWorkPost } from '@/store/workprovider/workpost/slice';
 import { workPostSelector, workPostLoadingSelector } from '@/store/workprovider/workpost/selector';
+
+import { fetchProfilePicEmp } from '@/store/auth/slice';
+
 
 const Workpage = () => {
 
@@ -32,13 +35,17 @@ const Workpage = () => {
 
     const dispatch = useDispatch();
 
-    const [isApplied, setIsApplied] = useState(false);
+
+
+    useEffect(() => {
+        dispatch(fetchProfilePicEmp());
+    }, []);
+
 
     const [isWorkRequestFromEmployeer, setIsWorkRequestFromEmployeer] = useState(false);
 
     const userId = useSelector(userIdSelector);
 
-    const [bookmark, setBookmark] = useState(false);
 
     const router = useRouter();
 
@@ -49,6 +56,8 @@ const Workpage = () => {
 
     const [uid, setUid] = useState("");
 
+    const callData = useSelector(applyRespDataSelector);
+
     useEffect(() => {
         dispatch(fetchWorkPost({
             workid: router.query.workid
@@ -57,7 +66,7 @@ const Workpage = () => {
         setUid(localStorage.getItem("uid"));
 
 
-    }, [router.query.workid]);
+    }, [router.query.workid, callData]);
 
     const data = useSelector(workPostSelector);
 
@@ -73,6 +82,7 @@ const Workpage = () => {
 
     const onBtnApplyClicked = () => {
         dispatch(applyWork(router.query.workid));
+
     }
 
     function checkUserApplied() {
@@ -136,7 +146,11 @@ const Workpage = () => {
         return false;
     }
 
-    if (dataLoading || data == undefined) {
+    if (data == undefined) {
+        dispatch(fetchWorkPost({
+            workid: router.query.workid
+        }));
+
         return <h1>Loading</h1>
     }
     return (
@@ -160,7 +174,7 @@ const Workpage = () => {
                 <div className="flex flex-col mx-20 px-10 py-10 bg-white h-auto rounded-lg">
                     <div className="flex flex-col">
                         <h1 className="text-xl font-bold text-[#091e42] cursor-pointer">{data.workName}</h1>
-                        <h1 className="text-sm mt-2 text-gray-700">Hrushikesh Bhosale</h1>
+                        <h1 className="text-sm mt-2 text-gray-700">{data.employeerName}</h1>
                         <div className="flex flex-row items-center mt-5">
                             <BiMap className="text-xl text-[#696977] mr-2" />
                             <h1 className="text-sm text-[#696977] w-full">{data.workAddress}</h1>
