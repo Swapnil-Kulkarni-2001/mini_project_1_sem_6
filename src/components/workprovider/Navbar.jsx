@@ -10,6 +10,7 @@ import Image from 'next/image';
 
 import { fetchProfilePicEmplr } from '@/store/auth/slice';
 import { profilePicSelector, profilePicLoadingSelector } from '@/store/auth/selector';
+import { useRouter } from 'next/router';
 
 // import { fetchUserInfoEmplr } from '@/store/userInfo/slice';
 // import { userInfoDataSelector, userInfoDataLoadingSelector } from '@/store/userInfo/selector';
@@ -24,6 +25,7 @@ const Navbar = () => {
 
     //const userInfoData = useSelector(userInfoDataSelector);
 
+    const router = useRouter();
 
     useEffect(() => {
         dispatch(fetchProfilePicEmplr());
@@ -35,7 +37,7 @@ const Navbar = () => {
     return (
         <div className="py-2 px-5 md:px-40 flex flex-row items-center bg-white ">
             <div className='border-4 py-1 border-white cursor-pointer'>
-                <h1 className="text-3xl text-blue-600 font-bold">Karya</h1>
+                <h1 onClick={()=>router.push("/wpuser/homepage")} className="text-3xl text-blue-600 font-bold">Karya</h1>
             </div>
             <div className="text-sm flex flex-row ml-auto">
                 <div className='border-4 py-1 rounded-md border-white mr-10  hover:border-b-[#ff7555]'>

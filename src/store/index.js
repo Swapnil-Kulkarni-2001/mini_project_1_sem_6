@@ -12,7 +12,7 @@ import applyWorkSlice  from "./applyWork/slice"
 import workPostSlice from "./workprovider/workpost/slice";
 import workSlice from "./worker/work/slice";
 import userInfoSlice from "./userInfo/slice";
-
+import workerSlice from "../store/workprovider/workers/slice";
 
 const store = configureStore({
     reducer:{
@@ -26,6 +26,7 @@ const store = configureStore({
         workPost : workPostSlice,
         work : workSlice,
         userInfo : userInfoSlice,
+        worker : workerSlice,
     },
 });
 

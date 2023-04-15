@@ -2,10 +2,12 @@ import React from 'react'
 import Image from 'next/image'
 import { FaUserCircle } from "react-icons/fa";
 import axios from "../../Axios/axios";
-const WorkAssignedCard = ({ emp_id, name, phone, profileImg,reload,workid }) => {
+import { useRouter } from 'next/router';
+const WorkAssignedCard = ({ emp_id, name, phone, profileImg, reload, workid }) => {
 
+    const router = useRouter();
 
-    const onBtnRemoveClicked = async() => {
+    const onBtnRemoveClicked = async () => {
         try {
 
             const resp = await axios.post("/employeer/removeEmployee", {
@@ -40,7 +42,10 @@ const WorkAssignedCard = ({ emp_id, name, phone, profileImg,reload,workid }) => 
                 </div>
 
                 <div className="flex flex-col self-start ml-4 ">
-                    <h1 className="text-base font-semibold">{name}</h1>
+                    <h1 onClick={() => router.push({
+                        pathname: "/wpuser/workers/[empid]",
+                        query: { empid: emp_id }
+                    }, "/wpuser/workers/" + emp_id)} className="text-base font-semibold cursor-pointer">{name}</h1>
                     <h1 className="text-xs font-semibold text-gray-600">{phone}</h1>
                     <div className='flex flex-row mt-2'>
                         <button onClick={onBtnRemoveClicked} className="px-3 py-[1px] border border-red-500 text-sm font-semibold text-red-500 hover:bg-red-500 hover:text-white">remove</button>

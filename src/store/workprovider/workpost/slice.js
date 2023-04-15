@@ -155,7 +155,7 @@ const workPostSlice = createSlice({
                 }
             }
 
-
+            console.log(payload,"in fetchAllWorkPost");
 
         });
 

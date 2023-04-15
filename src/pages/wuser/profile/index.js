@@ -80,7 +80,7 @@ const profile = () => {
                 skills: inskill
             });
 
-            if (resp.data.status == "succesfully skills updated") {
+            if (resp.data.status == "succesfully profile updated") {
                 reload();
                 inputSkillData.current.value = "";
             }

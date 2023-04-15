@@ -3,12 +3,17 @@ import FNavbar from '@/components/FNavbar'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { FaUserCircle } from "react-icons/fa";
-import WorkCard from '@/components/worker/homepage/WorkCard';
+// import WorkCard from '@/components/worker/homepage/WorkCard';
+import WorkCard from '@/components/worker/WorkCard';
 import { AiFillStar } from "react-icons/ai";
 import ProgressBar from '@/components/ProgressBar';
 import Image from 'next/image';
 
-
+//icons
+import { BsBookmarks } from "react-icons/bs";
+import { BsHouseDoor } from "react-icons/bs";
+import { MdWorkOutline } from "react-icons/md";
+//
 
 //store imports
 import { fetchRecommendedWorks, fetchInvitationList } from '@/store/worker/work/slice';
@@ -18,7 +23,8 @@ import { fetchProfilePicEmp } from '@/store/auth/slice';
 import { profilePicSelector, profilePicLoadingSelector } from '@/store/auth/selector';
 
 import { fetchUserInfoEmp } from '@/store/userInfo/slice';
-import { userInfoDataSelector,userInfoDataLoadingSelector } from '@/store/userInfo/selector';
+import { userInfoDataSelector, userInfoDataLoadingSelector } from '@/store/userInfo/selector';
+import { useRouter } from 'next/router';
 
 const homepage = () => {
 
@@ -26,6 +32,8 @@ const homepage = () => {
     const open = useSelector((state) => {
         return state.sideDrower.open;
     })
+
+    const router = useRouter();
 
     const profilePic = useSelector(profilePicSelector);
 
@@ -71,7 +79,7 @@ const homepage = () => {
 
                 <div className="flex flex-col  md:px-40 py-10 overflow-x-hidden">
                     <div className="flex flex-row ">
-                        <div className="flex flex-col bg-white w-[25rem] items-center md:py-8 md:px-5 border rounded-xl">
+                        <div className="flex flex-col bg-white  items-center md:py-8 md:px-5 border rounded-xl">
                             <div className="">
                                 {/* <FaUserCircle className="text-8xl text-gray-300" /> */}
                                 <div className="rounded-full relative h-28 w-28 ">
@@ -91,7 +99,25 @@ const homepage = () => {
 
                             </div>
                             <div className="mt-5">
-                                <button className="bg-[#457eff] px-5 py-1 rounded-3xl text-white text-lg font-semibold">Complete Profile</button>
+                                <button onClick={() => router.push("/wuser/profile")} className="border px-5 py-1 rounded-3xl text-blue-500 text-base font-semibold">Complete Profile</button>
+                            </div>
+                            <div onClick={() => router.push("/wuser/homepage")} className="flex flex-row w-full items-center mt-10 cursor-pointer  border hover:bg-[#f7f7f9] px-5 py-[6px] rounded-3xl ">
+                                <div className='flex flex-row items-center  gap-x-3'>
+                                    <BsHouseDoor className="" />
+                                    <button className="text-gray-500 text-sm font-semibold">Home</button>
+                                </div>
+                            </div>
+                            <div onClick={() => router.push("/wuser/works")} className="flex flex-row w-full items-center mt-5 cursor-pointer border hover:bg-[#f7f7f9]  px-5 py-[6px] rounded-3xl ">
+                                <div className='flex flex-row items-center  gap-x-3'>
+                                    <MdWorkOutline className="" />
+                                    <button className="text-gray-500 text-sm font-semibold">Works</button>
+                                </div>
+                            </div>
+                            <div onClick={() => router.push("/wuser/works/bookmarks")} className="flex flex-row w-full items-center mt-5 cursor-pointer  border hover:bg-[#f7f7f9] px-5 py-[6px] rounded-3xl ">
+                                <div className='flex flex-row items-center  gap-x-3'>
+                                    <BsBookmarks className="" />
+                                    <button className="text-gray-500 text-sm font-semibold">Bookmarks</button>
+                                </div>
                             </div>
                         </div>
 
@@ -117,10 +143,10 @@ const homepage = () => {
                                 </div>
                             </div>
 
-                            <div className="flex flex-col mt-5 p-5 bg-white h-full rounded-2xl">
+                            <div className="flex flex-col mt-5 p-5 bg-white rounded-2xl">
                                 <div className="flex flex-row items-center">
                                     <h1 className="text-lg font-semibold mr-5">Recommended works</h1>
-                                    <h1 className="text-lg font-semibold text-blue-500 cursor-pointer">view all</h1>
+                                    <h1 onClick={() => router.push("/wuser/works")} className="text-lg font-semibold text-blue-500 cursor-pointer">view all</h1>
                                 </div>
 
                                 <div className="flex flex-row mt-5 gap-x-5">
@@ -132,19 +158,21 @@ const homepage = () => {
                                                 return;
                                             }
                                             return (
-                                                <WorkCard
-                                                    workName={item.workName}
-                                                    employeerName={item.employeerName}
-                                                    workAddress={item.workAddress}
-                                                    workDuration={item.workDuration}
-                                                    workTime={item.workTime}
-                                                    workDescription={item.workDescription}
-                                                    workFrom={item.workFrom}
-                                                    postTime={item.postTime}
-                                                    employeerId={item.employeerId}
-                                                    workId={item._id}
-                                                    // data={item}
-                                                    key={key} />
+                                                // <WorkCard
+                                                //     workName={item.workName}
+                                                //     employeerName={item.employeerName}
+                                                //     workAddress={item.workAddress}
+                                                //     workDuration={item.workDuration}
+                                                //     workTime={item.workTime}
+                                                //     workDescription={item.workDescription}
+                                                //     workFrom={item.workFrom}
+                                                //     postTime={item.postTime}
+                                                //     employeerId={item.employeerId}
+                                                //     workId={item._id}
+                                                //     // data={item}
+                                                //     key={key} />
+                                                <WorkCard data={item} key={key} />
+
                                             )
                                         })
                                     }
@@ -155,46 +183,46 @@ const homepage = () => {
                                     }
                                 </div>
                             </div>
-                        </div>
 
-                    </div>
-                    <div className="flex flex-col mt-10 p-5 bg-white  w-full  rounded-xl overflow-hidden ">
-                        <div className="flex flex-row items-center   text-base font-semibold text-[#121224]">
-                            <h1 className="text-lg font-semibold mr-5">Work invites</h1>
-                            <h1 className="text-lg text-blue-500 cursor-pointer">view all</h1>
-                        </div>
-                        <div className='flex flex-row gap-x-10 h-full mt-5 overflow-x-auto scrollbar'>
-                            {/* <WorkCard />
+                            <div className="flex flex-col mt-5 p-5 bg-white  w-full  rounded-xl overflow-hidden ">
+                                <div className="flex flex-row items-center   text-base font-semibold text-[#121224]">
+                                    <h1 className="text-lg font-semibold mr-5">Work invites</h1>
+                                    <h1 onClick={()=>router.push("/wuser/works/invites")} className="text-lg text-blue-500 cursor-pointer">view all</h1>
+                                </div>
+                                <div className='flex flex-row gap-x-10 h-full mt-5 overflow-x-auto scrollbar'>
+                                    {/* <WorkCard />
                             <WorkCard />
                             <WorkCard /> */}
 
-                            {
-                                invitaionList.map((item, key) => {
-                                    if (key > 1 || item == null) {
-                                        return;
+                                    {
+                                        invitaionList.map((item, key) => {
+                                            if (key > 1 || item == null) {
+                                                return;
+                                            }
+                                            return (
+                                                <WorkCard
+                                                    // workName={item.workName}
+                                                    // employeerName={item.employeerName}
+                                                    // workAddress={item.workAddress}
+                                                    // workDuration={item.workDuration}
+                                                    // workTime={item.workTime}
+                                                    // workDescription={item.workDescription}
+                                                    // workFrom={item.workFrom}
+                                                    // postTime={item.postTime}
+                                                    // employeerId={item.employeerId}
+                                                    // workId={item._id}
+                                                    data={item}
+                                                    key={key} />
+                                            )
+                                        })
                                     }
-                                    return (
-                                        <WorkCard
-                                            workName={item.workName}
-                                            employeerName={item.employeerName}
-                                            workAddress={item.workAddress}
-                                            workDuration={item.workDuration}
-                                            workTime={item.workTime}
-                                            workDescription={item.workDescription}
-                                            workFrom={item.workFrom}
-                                            postTime={item.postTime}
-                                            employeerId={item.employeerId}
-                                            workId={item._id}
-                                            // data={item}
-                                            key={key} />
-                                    )
-                                })
-                            }
-                            {
-                                invitaionList == "" || invitaionList == [] || invitaionList == undefined || invitaionList == null ?
-                                    <h1 className="text-base text-center m-auto my-14 text-gray-500">No invitaion list now, you will get notified here when someone request you</h1>
-                                    : null
-                            }
+                                    {
+                                        invitaionList == "" || invitaionList == [] || invitaionList == undefined || invitaionList == null ?
+                                            <h1 className="text-base text-center m-auto my-14 text-gray-500">No invitaion list now, you will get notified here when someone request you</h1>
+                                            : null
+                                    }
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

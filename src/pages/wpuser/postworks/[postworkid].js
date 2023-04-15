@@ -23,7 +23,9 @@ import WorkAssignedCard from '@/components/workprovider/WorkAssignedCard';
 
 //icons
 import { AiOutlineClose } from "react-icons/ai";
-
+import { FiSend } from "react-icons/fi";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { MdOutlineAssignmentInd } from "react-icons/md";
 //store
 
 import { fetchProfilePicEmplr } from '@/store/auth/slice';
@@ -31,6 +33,8 @@ import { profilePicSelector, profilePicLoadingSelector } from '@/store/auth/sele
 
 import { fetchUserInfoEmplr } from '@/store/userInfo/slice';
 import { userInfoDataSelector, userInfoDataLoadingSelector } from '@/store/userInfo/selector';
+
+import axios from '../../../Axios/axios';
 
 
 const postworkid = () => {
@@ -112,6 +116,22 @@ const postworkid = () => {
     }
 
 
+    const onBtnFinishWorkClicked = async () => {
+        try {
+
+            const resp = await axios.post("/employeer/finishJob", {
+                postId: data._id
+            });
+
+            if(resp.data.status=="succesfully finished job posted")
+            {
+                router.replace("/wpuser/postworks");
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
 
     if (dataLoading || data == undefined) {
@@ -175,9 +195,20 @@ const postworkid = () => {
                             <h1 className="text-sm text-[#696977] w-full">{data.workFrom}</h1>
                         </div>
                         <div className="flex flex-row mt-7">
-                            <button onClick={() => setAssignedListModel(true)} className="px-5 py-1 border border-green-400 text-green-400  font-semibold mr-5 hover:shadow-inner">ASSIGNED TO</button>
-                            <button onClick={onBtnDeleteClicked} className="px-5 py-1 bg-red-500 text-white font-semibold  hover:shadow-xl">DELETE</button>
-
+                            <div className="flex flex-row items-center px-5 py-1 border border-green-400 mr-5 hover:shadow-inner">
+                                <MdOutlineAssignmentInd className="mr-2 text-lg text-green-500" />
+                                <button onClick={() => setAssignedListModel(true)} className="text-green-400 font-semibold ">ASSIGNED TO</button>
+                            </div>
+                            {/* <button onClick={() => setAssignedListModel(true)} className="px-5 py-1 border border-green-400 text-green-400  font-semibold mr-5 hover:shadow-inner">ASSIGNED TO</button> */}
+                            {/* <div className="flex flex-row items-center px-5 py-1 border border-blue-500 mr-5 hover:shadow-inner">
+                                <FiSend className="mr-2 text-blue-500" />
+                                <button className="text-blue-500 font-semibold ">SEND REQUEST</button>
+                            </div> */}
+                            {/* <button onClick={onBtnDeleteClicked} className="px-5 py-1 border border-red-500 text-red-500 font-semibold  hover:shadow-inner ">DELETE</button> */}
+                            <div className="flex flex-row items-center px-5 py-1 border border-red-500 mr-5 hover:shadow-inner">
+                                <RiDeleteBin6Line className="mr-2 text-red-500" />
+                                <button onClick={onBtnDeleteClicked} className="text-red-500 font-semibold">DELETE</button>
+                            </div>
 
                             <div className='flex flex-row ml-auto self-end'>
                                 <h1 className="text-sm text-[#696977]">posted:</h1>
@@ -200,9 +231,6 @@ const postworkid = () => {
                 <div className="flex flex-col mt-5 bg-white mx-20 px-10 py-10 rounded-lg">
                     <h1 className="text-lg font-bold text-[#091e42]">Total Applications</h1>
                     <div className="flex flex-col mt-5 gap-y-5">
-                        {/* <WorkApplicationCard />
-                        <WorkApplicationCard />
-                        <WorkApplicationCard /> */}
                         {
                             applicantList.map((item, key) =>
                                 <WorkApplicationCard assigned={checkAssignList(item._id)} reload={reload} workid={data._id} data={item} />
@@ -217,16 +245,19 @@ const postworkid = () => {
                         <AiOutlineClose onClick={() => setAssignedListModel(false)} className="text-xl cursor-pointer" />
                     </div>
                     <div className="flex flex-col gap-y-5 pb-10 px-10">
-                        {/* <WorkAssignedCard />
-                        <WorkAssignedCard />
-                        <WorkAssignedCard />
-                        <WorkAssignedCard />
-                        <WorkAssignedCard />
-                        <WorkAssignedCard /> */}
                         {
                             assignedList.map((item, key) => <WorkAssignedCard workid={data._id} reload={reload} emp_id={item._id} name={item.name} phone={item.phone} profileImg={item.profileImg} key={key} />)
                         }
                     </div>
+                    {
+                        assignedList.length != 0 ?
+                            <div className="px-10">
+                                <button onClick={onBtnFinishWorkClicked} className="px-5 py-1 border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white font-semibold text-base">Finish Work</button>
+                            </div>
+                            :
+                            null
+                    }
+
                 </div>
 
             </div>

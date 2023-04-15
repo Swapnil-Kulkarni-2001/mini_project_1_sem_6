@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import WorkCard from '@/components/worker/WorkCard';
 import { fetchAllWorks } from '@/store/public/slice';
 import { dataSelector } from '@/store/public/selector';
-import { useEffect,useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 import { fetchProfilePicEmp } from '@/store/auth/slice';
@@ -86,17 +86,17 @@ const AllJobs = () => {
                     <WorkCard /> */}
 
                     {
-                        allWork_data.map((item,key)=>(
-                            <WorkCard data={item} key={key}/>
+                        allWork_data.map((item, key) => (
+                            <WorkCard data={item} key={key} />
                         ))
                     }
                 </div>
 
-                <div className="flex flex-col h-96 my-10 p-10 bg-white basis-[35%]">
+                {/* <div className="flex flex-col h-96 my-10 p-10 bg-white basis-[35%]">
                     <div className="flex flex-col">
                         <FaFilter className="text-2xl text-[#4a90e2]" />
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     )

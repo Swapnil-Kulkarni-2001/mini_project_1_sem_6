@@ -10,6 +10,7 @@ import Image from 'next/image';
 
 import { fetchProfilePicEmp } from '@/store/auth/slice';
 import { profilePicSelector, profilePicLoadingSelector } from '@/store/auth/selector';
+import { useRouter } from 'next/router';
 
 const FNavbar = () => {
 
@@ -19,6 +20,8 @@ const FNavbar = () => {
         return state.sideDrower.open;
     });
 
+    const router = useRouter();
+
     const profilePic = useSelector(profilePicSelector);
 
     const profilePicLoading = useSelector(profilePicLoadingSelector);
@@ -26,11 +29,11 @@ const FNavbar = () => {
     return (
         <div className="py-2 px-5 md:px-40 flex flex-row items-center bg-white ">
             <div className='border-4 py-1 border-white cursor-pointer'>
-                <h1 className="text-3xl text-blue-600 font-bold">Karya</h1>
+                <h1 onClick={()=>router.push("/wuser/homepage")} className="text-3xl text-blue-600 font-bold">Karya</h1>
             </div>
             <div className="text-sm flex flex-row ml-auto">
                 <div className='border-4 py-1 rounded-md border-white  hover:border-b-[#ff7555]'>
-                    <Link href="/wuser/works" className="text-gray-600  hover:text-black font-semibold text-md">Find all Works</Link>
+                    <Link href="/wuser/works" className="text-gray-600  hover:text-black font-semibold text-md">Find works</Link>
                 </div>
             </div>
 

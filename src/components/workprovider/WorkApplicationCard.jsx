@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { FaUserCircle } from "react-icons/fa";
 import axios from "../../Axios/axios";
-const WorkApplicationCard = ({ data, workid, reload,assigned }) => {
+import { useRouter } from 'next/router';
+const WorkApplicationCard = ({ data, workid, reload, assigned }) => {
 
+
+    const router = useRouter();
 
 
     //console.log(assigned);
@@ -35,7 +38,7 @@ const WorkApplicationCard = ({ data, workid, reload,assigned }) => {
 
     // useEffect(() => {
 
-        
+
 
     // }, []);
 
@@ -56,7 +59,10 @@ const WorkApplicationCard = ({ data, workid, reload,assigned }) => {
                 </div>
 
                 <div className="flex flex-col self-start ml-4 ">
-                    <h1 className="text-base font-semibold">{data.name}</h1>
+                    <h1 onClick={() => router.push({
+                        pathname: "/wpuser/workers/[empid]",
+                        query: { empid: data._id }
+                    }, "/wpuser/workers/" + data._id)} className="text-base font-semibold cursor-pointer">{data.name}</h1>
                     <h1 className="text-sm font-semibold text-gray-600">{data.phone}</h1>
                     <div className='flex flex-row mt-2'>
 
