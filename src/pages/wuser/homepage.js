@@ -1,6 +1,6 @@
 import AccountSidePanel from '@/components/AccountSidePanel'
 import FNavbar from '@/components/FNavbar'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { FaUserCircle } from "react-icons/fa";
 // import WorkCard from '@/components/worker/homepage/WorkCard';
@@ -26,6 +26,7 @@ import { fetchUserInfoEmp } from '@/store/userInfo/slice';
 import { userInfoDataSelector, userInfoDataLoadingSelector } from '@/store/userInfo/selector';
 import { useRouter } from 'next/router';
 
+
 const homepage = () => {
 
 
@@ -38,10 +39,6 @@ const homepage = () => {
     const profilePic = useSelector(profilePicSelector);
 
     const profilePicLoading = useSelector(profilePicLoadingSelector);
-
-    // const myLoader = ({ src, width, quality }) => {
-    //     return src;
-    // }
 
     const dispatch = useDispatch();
 
@@ -150,29 +147,13 @@ const homepage = () => {
                                 </div>
 
                                 <div className="flex flex-row mt-5 gap-x-5">
-                                    {/* <WorkCard />
-                                    <WorkCard /> */}
                                     {
                                         recommendedWorks.map((item, key) => {
                                             if (key > 1) {
                                                 return;
                                             }
                                             return (
-                                                // <WorkCard
-                                                //     workName={item.workName}
-                                                //     employeerName={item.employeerName}
-                                                //     workAddress={item.workAddress}
-                                                //     workDuration={item.workDuration}
-                                                //     workTime={item.workTime}
-                                                //     workDescription={item.workDescription}
-                                                //     workFrom={item.workFrom}
-                                                //     postTime={item.postTime}
-                                                //     employeerId={item.employeerId}
-                                                //     workId={item._id}
-                                                //     // data={item}
-                                                //     key={key} />
                                                 <WorkCard data={item} key={key} />
-
                                             )
                                         })
                                     }
@@ -184,16 +165,12 @@ const homepage = () => {
                                 </div>
                             </div>
 
-                            <div className="flex flex-col mt-5 p-5 bg-white  w-full  rounded-xl overflow-hidden ">
+                            <div className="flex flex-col mt-5 p-5 bg-white rounded-2xl">
                                 <div className="flex flex-row items-center   text-base font-semibold text-[#121224]">
                                     <h1 className="text-lg font-semibold mr-5">Work invites</h1>
-                                    <h1 onClick={()=>router.push("/wuser/works/invites")} className="text-lg text-blue-500 cursor-pointer">view all</h1>
+                                    <h1 onClick={() => router.push("/wuser/works/invites")} className="text-lg text-blue-500 cursor-pointer">view all</h1>
                                 </div>
                                 <div className='flex flex-row gap-x-10 h-full mt-5 overflow-x-auto scrollbar'>
-                                    {/* <WorkCard />
-                            <WorkCard />
-                            <WorkCard /> */}
-
                                     {
                                         invitaionList.map((item, key) => {
                                             if (key > 1 || item == null) {
@@ -201,16 +178,6 @@ const homepage = () => {
                                             }
                                             return (
                                                 <WorkCard
-                                                    // workName={item.workName}
-                                                    // employeerName={item.employeerName}
-                                                    // workAddress={item.workAddress}
-                                                    // workDuration={item.workDuration}
-                                                    // workTime={item.workTime}
-                                                    // workDescription={item.workDescription}
-                                                    // workFrom={item.workFrom}
-                                                    // postTime={item.postTime}
-                                                    // employeerId={item.employeerId}
-                                                    // workId={item._id}
                                                     data={item}
                                                     key={key} />
                                             )

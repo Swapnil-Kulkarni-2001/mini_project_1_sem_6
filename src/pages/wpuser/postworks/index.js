@@ -29,6 +29,9 @@ import { postWork, fetchAllWorkPost, fetchWorkPost } from '@/store/workprovider/
 
 import { allWorkPostSelector, workPostSelector, isLoadingSelector } from '@/store/workprovider/workpost/selector';
 
+import { AiOutlineInfoCircle } from "react-icons/ai";
+import { useRouter } from 'next/router';
+
 const index = () => {
 
     const [workName, setWorkName] = useState("");
@@ -63,7 +66,7 @@ const index = () => {
     const profilePic = useSelector(profilePicSelector);
 
     const userInfoData = useSelector(userInfoDataSelector);
-  
+
 
 
 
@@ -73,6 +76,8 @@ const index = () => {
         dispatch(fetchUserInfoEmplr());
     }, []);
 
+
+    const router = useRouter();
 
 
     const validatePostDetails = () => {
@@ -155,14 +160,21 @@ const index = () => {
                     <AccountSidePanel />
                 </div>
 
-                <div className="flex flex-row items-center bg-white px-32 py-5 border-t shadow-md">
+                {/* <div className="flex flex-row items-center bg-white px-32 py-5 border-t shadow-md">
                     <div onClick={() => setModel(!model)} className="flex flex-row border-2 rounded-3xl items-center cursor-pointer hover:border-blue-600 py-1 px-5">
                         <AiFillPlusCircle className="text-[#4a90e2] text-4xl mr-2" />
                         <h1 className="text-lg font-semibold text-black">Post works</h1>
                     </div>
+                </div> */}
+
+                <div className="flex flex-col h-36 mx-40 mt-10 p-5 rounded-2xl bg-[#456995] ">
+                    <div className="flex flex-row mt-auto items-center ">
+                        <h1 className="text-4xl font-semibold text-white">Work posts</h1>
+                        <AiOutlineInfoCircle className="text-3xl text-white self-end ml-auto cursor-pointer" />
+                    </div>
                 </div>
 
-                <div className="flex flex-row h-full px-32 gap-x-20">
+                <div className="flex flex-row h-full px-40 gap-x-20">
                     <div className="flex flex-col gap-y-7 my-10 basis-[65%]">
                         {
 
@@ -183,8 +195,32 @@ const index = () => {
                         }
                     </div>
 
-                    {/* <div className="flex flex-col h-96 my-10 p-10 bg-white basis-[35%]">
+                    <div className='flex flex-col my-10 basis-[35%]'>
+                        <div className="flex flex-col p-5 bg-white rounded-2xl border">
+                            <div className="flex flex-row items-center bg-gray-100">
+                                <button onClick={()=>{
+                                    router.push("/wpuser/postworks/post");
+                                }} className="px-7 p-2 rounded-sm bg-[#456995] text-white">post new</button>
+                            </div>
+                            <div className="flex flex-col text-sm text-gray-600 bg-[#f1f4fd] border-2 text-center items-center p-5 rounded-2xl mt-5">
+                                <p>A new work post created will be shown to everyone(workers) in your nearby location.</p>
+                                <div className='flex flex-row'>
+                                    <p className="mr-2 ">post can also be deleted but cannot be modified once it is created.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    {/* <div className="flex flex-col my-10 p-5 bg-white rounded-2xl border basis-[35%]">
+                        <div className="flex flex-row items-center bg-gray-100">
+                            <button onClick={() => setModel(!model)} className="px-7 p-2 rounded-sm bg-[#456995] text-white">post new</button>
+                        </div>
+                        <div className="flex flex-col text-sm text-gray-600 bg-[#f1f4fd] border-2 text-center items-center p-5 rounded-2xl mt-5">
+                            <p>A new work post created will be shown to everyone(workers) in your nearby location.</p>
+                            <div className='flex flex-row'>
+                                <p className="mr-2 ">post can also be deleted but cannot be modified once it is created</p>
+                            </div>
+                        </div>
                     </div> */}
 
                 </div>

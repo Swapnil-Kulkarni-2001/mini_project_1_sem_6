@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 
 import { fetchProfilePicEmp } from '@/store/auth/slice';
 import { profilePicSelector, profilePicLoadingSelector } from '@/store/auth/selector';
+import { AiOutlineInfoCircle } from "react-icons/ai";
 
 
 const AllJobs = () => {
@@ -73,18 +74,14 @@ const AllJobs = () => {
                 <AccountSidePanel />
             </div>
 
-            <div className="flex flex-row items-center bg-white px-32 py-5 border-t shadow-md">
-                <MdWork className="text-[#4a90e2] text-4xl mr-5" />
-                <h1 className="text-lg font-semibold text-black">Recommended works for you</h1>
+            <div className="flex flex-col h-36 mx-40 mt-10 p-5 rounded-2xl bg-[#456995] ">
+                <div className="flex flex-row mt-auto items-center ">
+                    <h1 className="text-4xl font-semibold text-white">Recommended works</h1>
+                    <AiOutlineInfoCircle className="text-3xl text-white self-end ml-auto cursor-pointer" />
+                </div>
             </div>
-            <div className="flex flex-row h-full px-32 gap-x-20">
+            <div className="flex flex-row h-full px-40 gap-x-20">
                 <div className="flex flex-col gap-y-7 my-10 basis-[65%]">
-                    {/* <WorkCard />
-                    <WorkCard />
-                    <WorkCard />
-                    <WorkCard />
-                    <WorkCard /> */}
-
                     {
                         allWork_data.map((item, key) => (
                             <WorkCard data={item} key={key} />
@@ -92,11 +89,15 @@ const AllJobs = () => {
                     }
                 </div>
 
-                {/* <div className="flex flex-col h-96 my-10 p-10 bg-white basis-[35%]">
-                    <div className="flex flex-col">
-                        <FaFilter className="text-2xl text-[#4a90e2]" />
+                <div className='flex flex-col my-10 basis-[35%]'>
+                    <div className="flex flex-col p-5 bg-white rounded-2xl border">
+                        <div className="flex flex-col text-sm text-gray-600 bg-[#f1f4fd] border-2  p-5 rounded-2xl">
+                            <p>The works are listed here, their details can be viewed and checked.</p>
+                            <p className="mt-2">Apply for the work according to your need and wait for the reply.</p>
+                            <p className="mt-2">Once the application has been made, it cannot be revert backed.</p>
+                        </div>
                     </div>
-                </div> */}
+                </div>
             </div>
         </div>
     )

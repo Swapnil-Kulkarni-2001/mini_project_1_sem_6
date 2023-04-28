@@ -60,7 +60,7 @@ export const fetchProfilePicEmplr = createAsyncThunk("fetchProfilePicEmplr", asy
 });
 
 const initialState = {
-    isAuthenticated: false,
+    isAuthenticated: "nil",
     authLoading: false,
     isLogoutLoding: false,
     isFirstTime: true,
@@ -94,34 +94,21 @@ const authSlice = createSlice({
 
         builder.addCase(loginUser.fulfilled, (state, { payload }) => {
             state.authLoading = false;
-
-            // if(payload.status==="Successful as employee")
-            // {
-            //     state.isAuthenticated = true;
-            //     console.log("Auth");
-            // }
-
-
-
             if (payload.status === "failed to login") {
                 console.log("unAuth");
                 state.isAuthenticated = false;
             }
             else {
                 state.isAuthenticated = true;
-                console.log("Auth");
-                console.log(payload.data);
-                console.log(payload.data[0].email)
-                state.userType = payload.data[0].occuopation;
-                state.userEmail = payload.data[0].email;
-                state.userId = payload.data[0]._id;
-                state.userPass = payload.data[0].password;
-                state.userAccessToken = payload.token;
-
                 try {
                     state.profilePic = payload.data[0].profileImg;
+                    state.userType = payload.data[0].occuopation;
+                    state.userEmail = payload.data[0].email;
+                    state.userId = payload.data[0]._id;
+                    state.userPass = payload.data[0].password;
+                    state.userAccessToken = payload.token;
                 } catch (error) {
-
+                    state.isAuthenticated = "nil";
                 }
             }
 

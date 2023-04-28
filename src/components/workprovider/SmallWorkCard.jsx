@@ -47,14 +47,22 @@ const SmallWorkCard = ({ data, emp_id, invitationList, reload }) => {
     }
 
     return (
-        <div onClick={onBtnRequestClicked} className={`flex flex-col p-5 border-2 ${checkRequest()? "border-green-500": null} hover:border-blue-500 cursor-pointer`}>
+        <div onClick={onBtnRequestClicked} className={`flex flex-col p-5 border-2 rounded-lg shadow-sm`}>
             <h1 className="text-base font-semibold">{data.workName}</h1>
-            <div className="flex flex-row items-center ">
-                <h1 className="text-sm font-extralight">{data.workAddress}</h1>
-                <div className='flex flex-row items-center px-2 py-1 ml-auto bg-[#f4f5f7]'>
+            <div className="flex flex-row items-center">
+                <p className="text-sm font-extralight truncate basis-[80%]">{data.workAddress}</p>
+                {/* <div className='flex flex-row items-center px-2 py-1 ml-auto bg-[#f4f5f7]'>
                     <RxCounterClockwiseClock className="text-sm mr-2" />
                     <h1 className="text-xs font-semibold">{postTime}</h1>
-                </div>
+                </div> */}
+                {/* <button onClick={onBtnRequestClicked} className="px-2 py-1 ml-auto text-sm font-semibold border bg-[#e7f3ff] hover:bg-[#dae6f1] hover:text-[#1771e6] text-blue-500 rounded-sm">request</button> */}
+                
+                {
+                    checkRequest() ? <button disabled={true} onClick={onBtnRequestClicked} className="px-2 py-1 ml-auto basis-[20%] text-sm font-semibold border hover:text-[#1771e6] text-blue-500 rounded-sm">requested</button>
+                    :
+                    <button onClick={onBtnRequestClicked} className="px-2 py-1 ml-auto basis-[20%] text-sm font-semibold border bg-[#e7f3ff] hover:bg-[#dae6f1] hover:text-[#1771e6] text-blue-500 rounded-sm">request</button>
+                }
+                
             </div>
         </div>
     )

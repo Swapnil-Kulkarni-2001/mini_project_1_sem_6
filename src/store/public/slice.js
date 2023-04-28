@@ -38,8 +38,11 @@ const allWorkSlice = createSlice({
 
         builder.addCase(fetchAllWorks.fulfilled,(state,{payload})=>{
             state.isDataLoading = false;
-            state.data = payload.jobPosts;
-            //console.log(payload);
+            try{
+                state.data = payload.jobPosts;
+            }catch(error){
+
+            }
         });
 
         builder.addCase(fetchAllWorks.rejected,(state,action)=>{

@@ -25,7 +25,7 @@ const WorkCard = ({data}) => {
     //console.log(data," hh");
 
     return (
-        <div className="flex flex-col h-auto w-full  p-5 bg-white shadow-md border-2 cursor-default">
+        <div className="flex flex-col h-auto w-full  p-5 bg-white shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] rounded-lg border-2 cursor-default">
 
             <div className="flex flex-col ml-2">
                 <h1 onClick={() => router.push({

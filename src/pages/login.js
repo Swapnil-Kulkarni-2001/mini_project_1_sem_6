@@ -5,16 +5,17 @@ import { FcGoogle } from "react-icons/fc";
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '@/store/auth/slice';
 import { useRouter } from 'next/router';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
+import { userEmailSelector, userTypeSelector, userIdSelector } from '@/store/auth/selector';
 
-import {userEmailSelector, userTypeSelector, userIdSelector } from '@/store/auth/selector';
-
-
+import { setIsAuthenticated } from '@/store/auth/slice';
 
 const login = () => {
 
-  // const cookie = new Cookies();
+
 
   const [visible, setVisible] = useState(false);
 
@@ -53,19 +54,53 @@ const login = () => {
   }
 
   if (auth === true) {
+    dispatch(setIsAuthenticated("nil"));
+    toast.success('verification success', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
 
-    //Cookies.set("at",access_token);
-
-    localStorage.setItem("uid",user_id);
-    localStorage.setItem("utype",user_type);
+    localStorage.setItem("uid", user_id);
+    localStorage.setItem("utype", user_type);
 
     if (user_type === "Employee") {
-      router.push("/wuser/homepage")
+      setTimeout(() => {
+        router.push({
+          pathname: "/wuser/homepage",
+          query: { login: true }
+        }, "/wuser/homepage");
+      }, 2000);
     }
 
     if (user_type === "Employeer") {
-      router.push("/wpuser/homepage")
+      setTimeout(() => {
+        router.push({
+          pathname: "/wpuser/homepage",
+          query: { login: true }
+        }, "/wpuser/homepage");
+      }, 2000);
+      // router.push("/wpuser/homepage")
     }
+  }
+
+  if (auth == false) {
+    dispatch(setIsAuthenticated("nil"));
+    toast.error("verification failed!", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
   }
 
   return (
@@ -100,13 +135,10 @@ const login = () => {
                 <h1 className="text-gray-500 text-sm font-semibold m-auto">Sign in with Google</h1>
               </div>
             </button>
-
-            {
-              auth ? <h1>Authenticated</h1> : <h1>unAuthenticated</h1>
-            }
           </div>
         </div>
       </form>
+      <ToastContainer />
     </div>
   )
 }

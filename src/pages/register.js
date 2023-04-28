@@ -65,7 +65,7 @@ const register = () => {
     }
 
     return (
-        <div className="h-[100vh] flex flex-col">
+        <div className="flex flex-col">
             <RegisterNavbar />
             <div className="bg-[#fafbfe] h-full flex flex-col items-center px-3">
                 <div className="bg-white flex flex-col my-10 px-3 md:px-24 py-10">

@@ -15,6 +15,9 @@ import { fetchUserInfoEmp } from '@/store/userInfo/slice';
 
 import WorkCard from '@/components/worker/WorkCard';
 
+import { AiOutlineInfoCircle } from "react-icons/ai";
+
+
 const invites = () => {
 
     const open = useSelector((state) => {
@@ -46,7 +49,15 @@ const invites = () => {
                 </div>
             </div>
 
-            <div className="flex flex-row h-full px-32 gap-x-20">
+
+            <div className="flex flex-col h-36 mx-40 mt-10 p-5 rounded-2xl bg-[#456995] ">
+                <div className="flex flex-row mt-auto items-center ">
+                    <h1 className="text-4xl font-semibold text-white">Work invitations</h1>
+                    <AiOutlineInfoCircle className="text-3xl text-white self-end ml-auto cursor-pointer" />
+                </div>
+            </div>
+
+            <div className="flex flex-row h-full px-40 gap-x-20">
                 <div className="flex flex-col gap-y-7 my-10 basis-[65%]">
                     {
                         invitaionList.map((item, key) => {
@@ -55,16 +66,6 @@ const invites = () => {
                             }
                             return (
                                 <WorkCard
-                                    // workName={item.workName}
-                                    // employeerName={item.employeerName}
-                                    // workAddress={item.workAddress}
-                                    // workDuration={item.workDuration}
-                                    // workTime={item.workTime}
-                                    // workDescription={item.workDescription}
-                                    // workFrom={item.workFrom}
-                                    // postTime={item.postTime}
-                                    // employeerId={item.employeerId}
-                                    // workId={item._id}
                                     data={item}
                                     key={key} />
                             )
@@ -75,6 +76,16 @@ const invites = () => {
                             <h1 className="text-base text-center m-auto text-gray-500">No invitaion list now, you will get notified here when someone request you</h1>
                             : null
                     }
+                </div>
+                <div className='flex flex-col my-10 basis-[35%]'>
+                    <div className="flex flex-col p-5 bg-white rounded-2xl border">
+                        <div className="flex flex-col text-sm text-gray-600 bg-[#f1f4fd] border-2  p-5 rounded-2xl">
+                            <p>The works invitaion are listed here, their details can be viewed and checked.</p>
+                            <p className="mt-2">Apply for the work according to your need and wait for the reply.</p>
+                            <p className="mt-2">Once the application has been made, it cannot be revert backed.</p>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
